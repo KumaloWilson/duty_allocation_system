@@ -10,9 +10,36 @@ class DutyAllocationScreen extends StatefulWidget {
 }
 
 class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController departmentController = TextEditingController();
-  TextEditingController roleController = TextEditingController();
+  TextEditingController notesController = TextEditingController();
+  String? selectedEmployee;
+  List<String> dutyOptions = [
+    "all day",
+    "12.30hrs",
+    "night duty",
+    "LOCUM",
+    "Nights off",
+    "Vacation Leave",
+    "Study Leave",
+  ];
+  List<String> selectedDutyOptions = List.filled(7, "all day");
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchEmployees();
+  }
+
+  List<String> _employeeNames = [];
+
+  Future<void> _fetchEmployees() async {
+    // Simulate dummy data
+    final List<String> dummyEmployeeNames = ['John Doe', 'Jane Smith', 'Alice Johnson'];
+
+    setState(() {
+      _employeeNames.addAll(dummyEmployeeNames);
+    });
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,55 +56,71 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  TextField(
-                    controller: nameController,
-                    decoration: InputDecoration(labelText: 'Name'),
+                  DropdownButton<String>(
+                    value: selectedEmployee,
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedEmployee = newValue!;
+                      });
+                    },
+                    items: _employeeNames.map((String employeeName) {
+                      return DropdownMenuItem<String>(
+                        value: employeeName,
+                        child: Text(employeeName),
+                      );
+                    }).toList(),
                   ),
+                  for (int i = 0; i < 7; i++)
+                    DropdownButton<String>(
+                      value: selectedDutyOptions[i],
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedDutyOptions[i] = newValue!;
+                        });
+                      },
+                      items: dutyOptions.map((String dutyOption) {
+                        return DropdownMenuItem<String>(
+                          value: dutyOption,
+                          child: Text(dutyOption),
+                        );
+                      }).toList(),
+                    ),
                   TextField(
-                    controller: departmentController,
-                    decoration: InputDecoration(labelText: 'Department'),
+                    controller: notesController,
+                    decoration: InputDecoration(labelText: 'Notes'),
                   ),
-                  TextField(
-                    controller: roleController,
-                    decoration: InputDecoration(labelText: 'Role'),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          employeeProvider.addEmployee(
-                              Employee(
-                                name: nameController.text,
-                                department: departmentController.text,
-                                role: roleController.text,
-                                monday: "monday",
-                                tuesday: "tuesday",
-                                wednesday: "wednesday",
-                                thursday: "thursday",
-                                friday: "friday",
-                                saturday: "saturday",
-                                sunday: "sunday",
-                              )
-                          );
+                  ElevatedButton(
+                    onPressed: () {
+                      Employee newEmployee = Employee(
+                        name: selectedEmployee ?? '',
+                        monday: selectedDutyOptions[0],
+                        tuesday: selectedDutyOptions[1],
+                        wednesday: selectedDutyOptions[2],
+                        thursday: selectedDutyOptions[3],
+                        friday: selectedDutyOptions[4],
+                        saturday: selectedDutyOptions[5],
+                        sunday: selectedDutyOptions[6],
+                        department: notesController.text,
+                        role: selectedEmployee ?? '',
+                      );
 
-                          nameController.clear();
-                          departmentController.clear();
-                          roleController.clear();
-                        },
-                        child: Text('Add Employee'),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (c) => TablePreviewScreen()),
-                          );
-                        },
-                        child: Text('Preview Duties'),
-                      ),
-                    ],
-                  )
+                      employeeProvider.addEmployeeToRoster(newEmployee);
+
+                      selectedEmployee = null;
+                      selectedDutyOptions = List.filled(7, "all day");
+                      notesController.clear();
+                    },
+                    child: Text('Add Employee to Roster'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (c) => TablePreviewScreen()),
+                      );
+                    },
+                    child: Text('Preview Duties'),
+                  ),
                 ],
               ),
             ),

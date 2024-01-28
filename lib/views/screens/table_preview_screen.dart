@@ -2,11 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../models/employee_model.dart';
-import '../../providers/employee_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+
+import '../../models/employee_model.dart';
+import '../../providers/employee_provider.dart';
 
 class TablePreviewScreen extends StatefulWidget {
   const TablePreviewScreen({Key? key}) : super(key: key);
@@ -34,11 +35,11 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
               DataColumn(label: Text('Saturday')),
               DataColumn(label: Text('Sunday')),
             ],
-            rows: _buildRows(employeeProvider.employees),
+            rows: _buildRows(employeeProvider.selectedEmployees),
           ),
           ElevatedButton(
             onPressed: () {
-              saveAsPDF(employeeProvider.employees);
+              saveAsPDF(employeeProvider.selectedEmployees);
             },
             child: Text('Save as PDF'),
           ),
@@ -86,18 +87,85 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
     return tableData;
   }
 
+
   Future<void> saveAsPDF(List<Employee> employees) async {
     final pdf = pw.Document();
 
     pdf.addPage(
       pw.MultiPage(
-        pageFormat: PdfPageFormat.a4,
+        pageFormat: PdfPageFormat.a4.copyWith(
+          marginLeft: 20.0,
+          marginRight: 20.0,
+          marginTop: 20.0,
+          marginBottom: 20.0,
+        ),
+
+        header: (pw.Context context){
+          return pw.Column(
+            children: [
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Text(
+                    'FROM:...............................................................',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                  ),
+
+                  pw.Text(
+                    'TO:.................................................................',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                  ),
+                ]
+              ),
+
+              pw.SizedBox(
+                height: 12
+              ),
+
+              pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                  children: [
+                    pw.Text(
+                      'Compiled By:.......................................................',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                    ),
+
+                    pw.Text(
+                      'Date:..............................................................',
+                      style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                    ),
+                  ]
+              ),
+
+              pw.SizedBox(
+                  height: 12
+              ),
+            ]
+          );
+        },
+
+        footer: (pw.Context context) {
+          return pw.Container(
+            alignment: pw.Alignment.centerLeft,
+            child: pw.Text(
+              'Comment:...................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................',
+              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+            ),
+          );
+        },
+
         build: (context) => [
           pw.TableHelper.fromTextArray(
             headers: ['Name', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-            headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-            cellAlignment: pw.Alignment.center,
+            headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12),
+            headerAlignment: pw.Alignment.center,
+            cellAlignment: pw.Alignment.centerLeft,
+            headerHeight: 40,
             cellHeight: 30,
+            cellStyle: pw.TextStyle(
+              fontSize: 10
+            ),
+            headerPadding: pw.EdgeInsets.zero,
             data: _buildTableData(employees),
           ),
         ],
