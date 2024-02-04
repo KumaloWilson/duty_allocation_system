@@ -1,17 +1,22 @@
+import 'package:duty_allocation_system/api_services/api_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../models/employee_model.dart';
-import '../../providers/employee_provider.dart';
+import '../../../models/employee_model.dart';
+import '../../../providers/employee_provider.dart';
 import 'table_preview_screen.dart';
 
 class DutyAllocationScreen extends StatefulWidget {
+  const DutyAllocationScreen({super.key});
+
   @override
   _DutyAllocationScreenState createState() => _DutyAllocationScreenState();
 }
 
 class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
   TextEditingController notesController = TextEditingController();
+  TextEditingController owingController = TextEditingController();
   String? selectedEmployee;
+
   List<String> dutyOptions = [
     "all day",
     "12.30hrs",
@@ -26,20 +31,12 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
   @override
   void initState() {
     super.initState();
-    _fetchEmployees();
-  }
-
-  List<String> _employeeNames = [];
-
-  Future<void> _fetchEmployees() async {
-    // Simulate dummy data
-    final List<String> dummyEmployeeNames = ['John Doe', 'Jane Smith', 'Alice Johnson'];
-
     setState(() {
-      _employeeNames.addAll(dummyEmployeeNames);
+      ApiAssistants.fetchEmployees(employeeNames);
     });
-
   }
+
+  List<String> employeeNames = [];
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +60,7 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
                         selectedEmployee = newValue!;
                       });
                     },
-                    items: _employeeNames.map((String employeeName) {
+                    items: employeeNames.map((String employeeName) {
                       return DropdownMenuItem<String>(
                         value: employeeName,
                         child: Text(employeeName),
@@ -92,17 +89,17 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
                   ElevatedButton(
                     onPressed: () {
                       Employee newEmployee = Employee(
-                        name: selectedEmployee ?? '',
-                        monday: selectedDutyOptions[0],
-                        tuesday: selectedDutyOptions[1],
-                        wednesday: selectedDutyOptions[2],
-                        thursday: selectedDutyOptions[3],
-                        friday: selectedDutyOptions[4],
-                        saturday: selectedDutyOptions[5],
-                        sunday: selectedDutyOptions[6],
-                        department: notesController.text,
-                        role: selectedEmployee ?? '',
-                      );
+                          name: selectedEmployee ?? '',
+                          role: 'RGN',
+                          department: 'pead',
+                          monday: selectedDutyOptions[0],
+                          tuesday: selectedDutyOptions[1],
+                          wednesday: selectedDutyOptions[2],
+                          thursday: selectedDutyOptions[3],
+                          friday: selectedDutyOptions[4],
+                          saturday: selectedDutyOptions[5],
+                          sunday: selectedDutyOptions[6],
+                          owing: 2);
 
                       employeeProvider.addEmployeeToRoster(newEmployee);
 

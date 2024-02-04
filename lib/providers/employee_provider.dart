@@ -3,11 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/employee_model.dart';
 
 class EmployeeProvider extends ChangeNotifier {
-  List<Employee> _allEmployees = [
-    Employee(name: "John Doe", department: "IT", role: "Developer", monday: 'monday', tuesday: 'tuesday', wednesday: 'wednesday', thursday: 'thursday', friday: 'friday', saturday: 'saturday', sunday: 'sunday'),
-    Employee(name: "Jane Smith", department: "HR", role: "Manager" , monday: 'monday', tuesday: 'tuesday', wednesday: 'wednesday', thursday: 'thursday', friday: 'friday', saturday: 'saturday', sunday: 'sunday'),
-    // Add more employees as needed
-  ];
+  List<Employee> _allEmployees = [];
 
   List<Employee> _selectedEmployees = [];
 

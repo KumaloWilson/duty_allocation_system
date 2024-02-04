@@ -1,5 +1,6 @@
 import 'package:duty_allocation_system/providers/employee_provider.dart';
-import 'package:duty_allocation_system/views/screens/duty_allocation_screen.dart';
+import 'package:duty_allocation_system/views/screens/mainscreens/duty_allocation_screen.dart';
+import 'package:duty_allocation_system/views/screens/mainscreens/home_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -24,8 +25,8 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DutyAllocationScreen(),
+    return const MaterialApp(
+      home: HomeScreen(),
     );
   }
 }
