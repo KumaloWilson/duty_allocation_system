@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "157083967957",
+    "project_id": "stjosephsdutymanager",
+    "storage_bucket": "stjosephsdutymanager.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:157083967957:android:af065c7d5bc5496bf9dd5c",
+        "android_client_info": {
+          "package_name": "com.example.duty_allocation_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCsfUdwIEETCw-x1YhBfQSG5Kf2-RGPdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
