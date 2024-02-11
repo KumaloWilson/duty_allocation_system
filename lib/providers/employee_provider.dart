@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import '../models/employee_model.dart';
 
 class EmployeeProvider extends ChangeNotifier {
-  List<Employee> _allEmployees = [];
+  final List<Employee> _allEmployees = [];
 
-  List<Employee> _selectedEmployees = [];
+  final List<Employee> _selectedEmployees = [];
 
   void addEmployeeToRoster(Employee employee) {
     _selectedEmployees.add(employee);

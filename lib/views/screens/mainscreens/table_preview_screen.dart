@@ -21,7 +21,7 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
         child: Column(
           children: [
             DataTable(
-              columns: [
+              columns: const [
                 DataColumn(label: Text('Name')),
                 DataColumn(label: Text('Role')),
                 DataColumn(label: Text('Dept')),
@@ -41,7 +41,7 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
                 Helpers.saveAsPDF(employeeProvider.selectedEmployees,
                     _buildTableData(employeeProvider.selectedEmployees));
               },
-              child: Text('Save as PDF'),
+              child: const Text('Save as PDF'),
             ),
           ],
         ),

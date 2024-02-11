@@ -19,6 +19,29 @@ class Helpers {
         context, MaterialPageRoute(builder: (c) => nextScreen));
   }
 
+
+  //Method to add employees To the Roster
+  static  addToRoster( String selectedEmployee, String selectedDept, List selectedDutyOptions, ) {
+    Employee newEmployee = Employee(
+        name: selectedEmployee ?? '',
+        role: 'RGN',
+        department: selectedDept ?? '',
+        monday: selectedDutyOptions[0],
+        tuesday: selectedDutyOptions[1],
+        wednesday: selectedDutyOptions[2],
+        thursday: selectedDutyOptions[3],
+        friday: selectedDutyOptions[4],
+        saturday: selectedDutyOptions[5],
+        sunday: selectedDutyOptions[6],
+        owing: 2
+    );
+
+    selectedDutyOptions = List.filled(7, "all day");
+
+    return newEmployee;
+  }
+
+
   // Method to save table as PDF
   static Future<void> saveAsPDF(List<Employee> employees, var tableData) async {
     final pdf = pw.Document();
@@ -91,7 +114,7 @@ class Helpers {
             cellAlignment: pw.Alignment.center,
             headerHeight: 40,
             cellHeight: 30,
-            cellStyle: pw.TextStyle(fontSize: 10),
+            cellStyle: const pw.TextStyle(fontSize: 10),
             headerPadding: pw.EdgeInsets.zero,
             data: tableData,
           ),

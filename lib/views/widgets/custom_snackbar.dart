@@ -1,54 +1,25 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 
-class MySnackBars {
-  /// failure
-  static var failureSnackBar = SnackBar(
-    elevation: 0,
-    behavior: SnackBarBehavior.floating,
-    backgroundColor: Colors.transparent,
-    content: AwesomeSnackbarContent(
-      title: 'On Snap!',
-      message:
-      'You have failed to read this failure message.\nPlease try again!',
-      contentType: ContentType.failure,
-    ),
-  );
+class CustomSnackBar extends StatefulWidget {
+  const CustomSnackBar({super.key});
 
-  /// help
-  static var helpSnackBar = SnackBar(
-    elevation: 0,
-    behavior: SnackBarBehavior.floating,
-    backgroundColor: Colors.transparent,
-    content: AwesomeSnackbarContent(
-      title: 'Success',
-      message: 'Appointment Booked Successfully',
-      contentType: ContentType.help,
-    ),
-  );
+  @override
+  State<CustomSnackBar> createState() => _CustomSnackBarState();
+}
 
-  /// success
-  static var successSnackBar = SnackBar(
-    elevation: 0,
-    behavior: SnackBarBehavior.floating,
-    backgroundColor: Colors.transparent,
-    content: AwesomeSnackbarContent(
-      title: 'Success',
-      message:
-      'Coupon Code Copied to Clipboard',
-      contentType: ContentType.success,
-    ),
-  );
-
-  /// warning
-  static var warningSnackBar = SnackBar(
-    elevation: 0,
-    behavior: SnackBarBehavior.floating,
-    backgroundColor: Colors.transparent,
-    content: AwesomeSnackbarContent(
-      title: 'Warning!',
-      message: 'You Have a warning for this message.\nPlease read carefully!',
-      contentType: ContentType.warning,
-    ),
-  );
+class _CustomSnackBarState extends State<CustomSnackBar> {
+  @override
+  Widget build(BuildContext context) {
+    return SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'On Snap!',
+        message: 'You have failed to read this failure message.\nPlease try again!',
+        contentType: ContentType.failure,
+      ),
+    );
+  }
 }
