@@ -1,13 +1,14 @@
-import 'package:date_input_form_field/date_input_form_field.dart';
+
 import 'package:flutter/material.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:platform_x_universal/utils/colors/pallete.dart';
-import 'package:platform_x_universal/views/screens/universal_screens/authorization_screens/create_password.dart';
-import '../../../../helpers/genenal_helpers.dart';
-import '../../../widgets/custom_button.dart';
-import '../../../widgets/custom_text_field.dart';
+
+import '../../../helpers/helper_methods.dart';
+import '../../../utils/colors/pallete.dart';
+import '../../widgets/custom_button.dart';
+import '../../widgets/custom_text_field.dart';
+import 'create_password.dart';
 
 class AdditionalPersonalInfoScreen extends StatelessWidget {
   final String email;
@@ -20,8 +21,6 @@ class AdditionalPersonalInfoScreen extends StatelessWidget {
   final TextEditingController firstNameController = TextEditingController();
 
   final TextEditingController lastNameController = TextEditingController();
-
-  final TextEditingController dateController = TextEditingController();
 
   String? selectedGender = 'Male';
 
@@ -161,40 +160,6 @@ class AdditionalPersonalInfoScreen extends StatelessWidget {
               height: 8,
             ),
 
-            DateInputFormField(
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              format: 'dd/MM/yyyy',
-              controller: dateController,
-              scrollPadding: EdgeInsets.zero,
-              style: TextStyle(
-                  color: Pallete.primaryColor,
-                  fontSize: 12
-              ),
-
-              decoration: InputDecoration(
-                  labelText: 'Date of Birth',
-                  labelStyle: const TextStyle(
-                      color: Colors.grey
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(color: Colors.grey),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(color: Colors.grey),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Pallete.primaryColor),
-                  ),
-                  contentPadding: EdgeInsets.zero,
-                  prefixIcon: const Icon(
-                      Icons.date_range
-                  )
-              ),
-            ),
-
 
             GenderPickerWithImage(
               showOtherGender: true,
@@ -240,7 +205,7 @@ class AdditionalPersonalInfoScreen extends StatelessWidget {
                         username: username,
                         phoneNumber: phoneNumber,
                         fullName: '${firstNameController.text.trim()} ${lastNameController.text.trim()}',
-                        dob: dateController.text.trim(),
+                        dob: '15/09/1958',
                         gender: selectedGender!
                     )
                 )

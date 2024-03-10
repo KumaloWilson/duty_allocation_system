@@ -1,19 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:platform_x_universal/api_services/auth_methods/authorization_services.dart';
-import 'package:platform_x_universal/helpers/genenal_helpers.dart';
-import 'package:platform_x_universal/utils/asset_utils/assets_util.dart';
-import 'package:platform_x_universal/utils/colors/pallete.dart';
-import 'package:platform_x_universal/views/screens/universal_screens/authorization_screens/login.dart';
-import '../../../../helpers/auth_helpers.dart';
-import '../../../widgets/custom_button.dart';
-import '../../../widgets/loading_widgets/custom_loader.dart';
+import '../../../api_services/auth_methods/authorization_services.dart';
+import '../../../helpers/helper_methods.dart';
+import '../../../utils/asset_utils/assets_util.dart';
+import '../../../utils/colors/pallete.dart';
+import '../../widgets/custom_button.dart';
 import 'auth_handler.dart';
 import 'create_password.dart';
+import 'login.dart';
 
 class ResendResetEmailScreen extends StatelessWidget {
   final String email;
@@ -39,7 +36,7 @@ class ResendResetEmailScreen extends StatelessWidget {
                 GestureDetector(
                   onTap: ()async{
                     await AuthServices.signOut();
-                    Helpers.permanentNavigator(context, Login());
+                    Helpers.permanentNavigator(context, AuthHandler());
                   },
                   child: Container(
                     padding: EdgeInsets.all(8),

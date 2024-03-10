@@ -1,74 +1,39 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
-  final String buttonText;
-  final Color buttonTextColor;
-  final IconData buttonIcon;
-  Color? iconColor;
-  final Color buttonColor;
-  final Color? neumophismPrimaryColor;
-  final Color? neumophismSecondaryColor;
+  final Color btnColor;
+  final double width;
+  double? height;
+  final double borderRadius;
+  BoxBorder? boxBorder;
+  final Widget child;
   final void Function() onTap;
 
   CustomButton({
-    Key? key,
-    required this.buttonText,
-    required this.buttonTextColor,
-    required this.buttonIcon,
-    this.iconColor,
-    this.neumophismPrimaryColor,
-    this.neumophismSecondaryColor,
-    required this.buttonColor,
+    super.key,
+    required this.btnColor,
+    required this.width,
+    required this.borderRadius,
+    this.height,
+    required this.child,
+    this.boxBorder,
     required this.onTap,
-  }) : super(key: key);
-
+  });
+///kuzi remove
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 4),
-        decoration: BoxDecoration(
-          color: buttonColor,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: neumophismSecondaryColor ?? Colors.black,
-              offset: const Offset(-1, -1),
-              blurRadius: 2,
-            ),
-            BoxShadow(
-              color: neumophismPrimaryColor ?? Colors.black,
-              offset: const Offset(1, 1),
-              blurRadius: 2,
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                buttonText,
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: buttonTextColor,
-                ),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Icon(
-                buttonIcon,
-                color: iconColor ?? buttonTextColor,
-                size: 22,
-              )
-            ],
-          ),
-        ),
-      ),
+          width: width,
+          height: height ?? 50,
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+          decoration: BoxDecoration(
+              color: btnColor,
+              borderRadius: BorderRadius.circular(borderRadius),
+              border: boxBorder),
+          child: child),
     );
   }
 }

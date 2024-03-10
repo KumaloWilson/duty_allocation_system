@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:platform_x_universal/utils/colors/pallete.dart';
+
+import '../../utils/colors/pallete.dart';
 
 class PersonalTile extends StatelessWidget {
   const PersonalTile({super.key, required this.onTap, required this.icon, required this.title});

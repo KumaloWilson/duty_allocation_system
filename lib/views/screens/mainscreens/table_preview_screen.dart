@@ -1,9 +1,11 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../helpers/helper_methods.dart';
-import '../../../models/employee_model.dart';
-import '../../../providers/employee_provider.dart';
-
+import '../../../models/duty_model.dart';
+import '../../../providers/duty_provider.dart';
+import '../../../utils/colors/pallete.dart';
+import '../../widgets/custom_button.dart';
 class TablePreviewScreen extends StatefulWidget {
   const TablePreviewScreen({Key? key}) : super(key: key);
 
@@ -12,44 +14,125 @@ class TablePreviewScreen extends StatefulWidget {
 }
 
 class _TablePreviewScreenState extends State<TablePreviewScreen> {
+  var employee_duty_Provider;
+
   @override
   Widget build(BuildContext context) {
-    var employeeProvider = Provider.of<EmployeeProvider>(context);
+    employee_duty_Provider = Provider.of<DutyProvider>(context);
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        backgroundColor: Colors.black87,
+        title: const Text(
+          'Preview Duties',
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+        centerTitle: true,
+      ),
+
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child:  ListView(
           children: [
-            DataTable(
-              columns: const [
-                DataColumn(label: Text('Name')),
-                DataColumn(label: Text('Role')),
-                DataColumn(label: Text('Dept')),
-                DataColumn(label: Text('Monday')),
-                DataColumn(label: Text('Tuesday')),
-                DataColumn(label: Text('Wednesday')),
-                DataColumn(label: Text('Thursday')),
-                DataColumn(label: Text('Friday')),
-                DataColumn(label: Text('Saturday')),
-                DataColumn(label: Text('Sunday')),
-                DataColumn(label: Text('Owing')),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    DataTable(
+                      border: TableBorder.all(
+                        width: 2
+                      ),
+                      headingTextStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      columnSpacing: 20,
+                      columns: const [
+                        DataColumn(label: Text('NAME')),
+                        DataColumn(label: Text('ROLE')),
+                        DataColumn(label: Text('DEPT')),
+                        DataColumn(label: Text('MONDAY')),
+                        DataColumn(label: Text('TUESDAY')),
+                        DataColumn(label: Text('WEDNESDAY')),
+                        DataColumn(label: Text('THURSDAY')),
+                        DataColumn(label: Text('FRIDAY')),
+                        DataColumn(label: Text('SATURDAY')),
+                        DataColumn(label: Text('SUNDAY')),
+                        DataColumn(label: Text('OWING')),
+                        DataColumn(label: Text('ACTION')), // Added column for delete button
+                      ],
+                      rows: _buildRows(employee_duty_Provider.selectedEmployees),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(
+              height: 32,
+            ),
+
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomButton(
+                  width: 200,
+                  btnColor: Pallete.primaryColor,
+                  borderRadius: 10,
+                  child: Text(
+                    'Save as PDF'
+                  ),
+                  onTap: () async{
+                    String saveLocation = await Helpers.saveAsPDF(employee_duty_Provider.selectedEmployees, _buildTableData(employee_duty_Provider.selectedEmployees));
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          elevation: 0,
+                          behavior: SnackBarBehavior.floating,
+                          backgroundColor: Colors.transparent,
+                          content: AwesomeSnackbarContent(
+                            title: 'File Saved Successfully',
+                            message: 'Location: $saveLocation',
+
+                            contentType: ContentType.success,
+                          ),
+                        )
+                    );
+                  },
+                ),
+
+                const SizedBox(
+                  width: 32,
+                ),
+
+                CustomButton(
+                  width: 200,
+                  btnColor: Pallete.primaryColor,
+                  borderRadius: 10,
+                  child: Text(
+                      'Save and Email PDF'
+                  ),
+                  onTap: () {
+
+                  },
+                ),
               ],
-              rows: _buildRows(employeeProvider.selectedEmployees),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Helpers.saveAsPDF(employeeProvider.selectedEmployees,
-                    _buildTableData(employeeProvider.selectedEmployees));
-              },
-              child: const Text('Save as PDF'),
-            ),
+
           ],
         ),
       ),
     );
   }
 
-  List<DataRow> _buildRows(List<Employee> employees) {
+  List<DataRow> _buildRows(List<DutyModel> employees) {
     List<DataRow> rows = [];
     for (var employee in employees) {
       DataRow row = DataRow(
@@ -65,6 +148,14 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
           DataCell(Text(employee.saturday)),
           DataCell(Text(employee.sunday)),
           DataCell(Text(employee.owing.toString())),
+          DataCell(
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                _deleteEmployee(employee);
+              },
+            ),
+          ),
         ],
       );
       rows.add(row);
@@ -72,22 +163,28 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
     return rows;
   }
 
-  List<List<String>> _buildTableData(List<Employee> employees) {
+  void _deleteEmployee(DutyModel employee_duty) {
+    setState(() {
+      employee_duty_Provider.removeEmployeeFromRoster(employee_duty);
+    });
+  }
+
+  List<List<String>> _buildTableData(List<DutyModel> employee_duties) {
     List<List<String>> tableData = [];
 
-    for (var employee in employees) {
+    for (var employee_duty in employee_duties) {
       tableData.add([
-        employee.name,
-        employee.role,
-        employee.department,
-        employee.monday,
-        employee.tuesday,
-        employee.wednesday,
-        employee.thursday,
-        employee.friday,
-        employee.saturday,
-        employee.sunday,
-        employee.owing.toString()
+        employee_duty.name,
+        employee_duty.role,
+        employee_duty.department,
+        employee_duty.monday,
+        employee_duty.tuesday,
+        employee_duty.wednesday,
+        employee_duty.thursday,
+        employee_duty.friday,
+        employee_duty.saturday,
+        employee_duty.sunday,
+        employee_duty.owing.toString()
       ]);
     }
 

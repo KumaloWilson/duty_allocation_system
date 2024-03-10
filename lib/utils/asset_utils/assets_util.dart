@@ -17,11 +17,22 @@ class Assets {
   static String employees = 'assets/images/nurses.png';
   static String settings = 'assets/images/settings.png';
   static String homeProfile = 'assets/images/me.png';
+  static String student = 'assets/images/student.png';
+  static String nurse = 'assets/images/nurse.png';
+  static String midwife = 'assets/images/midwife.png';
+  static String generalhand = 'assets/images/generalhand.png';
+  static String nurseaid = 'assets/images/nurse.png';
+
+
+
+
+
 
 
 
 
   //animations
+  static String addEmployeesAnimation = 'assets/animations/add_employees.json';
   static String deliveryAnimation = 'assets/animations/delivery_animation.json';
   static String agentAnimation = 'assets/animations/agentCenterOnlanding.json';
   static String agentDoneAnimation = 'assets/animations/agentDoneAnimation.json';

@@ -17,10 +17,10 @@ class HomeOption extends StatelessWidget {
         onTap: onTap,
         child: Container(
           margin: const EdgeInsets.only(
-            left: 12,
-            top: 12
+            left: 24,
+            top: 24
           ),
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.all(24),
           decoration: BoxDecoration(
               color: backgroundColor.withOpacity(0.2),
               image: DecorationImage(

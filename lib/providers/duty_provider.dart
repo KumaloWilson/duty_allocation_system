@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/employee_model.dart';
+import '../models/duty_model.dart';
 
 class DutyProvider extends ChangeNotifier {
   final List<DutyModel> _allEmployees = [];

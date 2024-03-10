@@ -1,16 +1,12 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:duty_allocation_system/views/screens/authorization_screens/auth_handler.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:platform_x_universal/api_services/auth_methods/authorization_services.dart';
-import 'package:platform_x_universal/helpers/shared_preferances_helper.dart';
-import 'package:platform_x_universal/utils/asset_utils/assets_util.dart';
-import 'package:platform_x_universal/views/screens/agent_module/agent_tabs/home/baskets/see_all_products.dart';
-import 'package:platform_x_universal/views/screens/universal_screens/authorization_screens/auth_handler.dart';
-import 'package:platform_x_universal/views/screens/universal_screens/usertype/select_user_type.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import '../../helpers/genenal_helpers.dart';
+import '../../api_services/auth_methods/authorization_services.dart';
+import '../../helpers/helper_methods.dart';
+import '../../utils/asset_utils/assets_util.dart';
 import '../../utils/colors/pallete.dart';
 import 'custom_button.dart';
 import 'loading_widgets/custom_loader.dart';
@@ -109,22 +105,9 @@ class MyDrawer extends StatelessWidget {
             trailing: const Icon(
                 Icons.navigate_next
             ),
-            onTap: () => Helpers.temporaryNavigator(context, const SeeAllProducts(productType: 'basket'))
+            onTap: () => ()
           ),
 
-          ListTile(
-            leading: Icon(
-              Icons.category_outlined,
-              color: Pallete.primaryColor,
-            ),
-            title: const Text(
-                'Single Products'
-            ),
-            trailing: const Icon(
-                Icons.navigate_next
-            ),
-              onTap: () => Helpers.temporaryNavigator(context, const SeeAllProducts(productType: 'simple'))
-          ),
 
 
           ListTile(
@@ -189,10 +172,8 @@ class MyDrawer extends StatelessWidget {
                 Icons.navigate_next
             ),
             onTap: () async{
-              await SharedPreferencesHelper.clearCachedUserRole();
               await AuthServices.signOut();
-
-              Helpers.permanentNavigator(context, RoleSelectionScreen());
+              Helpers.permanentNavigator(context, AuthHandler());
             }
           ),
 

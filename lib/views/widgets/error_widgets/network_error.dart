@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:platform_x_universal/utils/asset_utils/assets_util.dart';
-import 'package:platform_x_universal/utils/colors/pallete.dart';
-import 'package:platform_x_universal/views/widgets/custom_button.dart';
+import '../../../utils/asset_utils/assets_util.dart';
+import '../../../utils/colors/pallete.dart';
+import '../custom_button.dart';
 
 class NetworkError extends StatelessWidget {
   const NetworkError({super.key, required this.onTap});

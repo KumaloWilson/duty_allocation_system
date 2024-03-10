@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
@@ -54,11 +52,6 @@ class AuthServices {
       // Step 4: Set custom claim for user role
       final String? userToken = await userCredential.user!.getIdToken();
 
-      await sendUserRoleAndToken(userToken!.toString().trim(), userRole);
-
-      // Custom claims set successfully
-      print('Custom claims set successfully');
-
 
     } on FirebaseAuthException catch (e) {
       // Handle specific Firebase authentication errors
@@ -75,37 +68,6 @@ class AuthServices {
       rethrow; // Rethrow the original error for broader handling
     }
   }
-
-
-  // Function to send user role and token to server
-  static Future<void> sendUserRoleAndToken(String userToken, String userRole) async {
-    try {
-      const String apiUrl = 'https://set-custom-claim.onrender.com/setCustomClaims';
-
-      final body = {
-        'token': userToken,
-        'roles': [userRole],
-      };
-
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(body),
-      );
-
-      if (response.statusCode == 200) {
-        print('Custom Claims set successfully');
-      } else {
-        throw Exception('Failed to set custom claims: ${response.body}');
-      }
-    } catch (e) {
-      // Handle errors
-      throw Exception('Failed to set custom claims: $e');
-    }
-  }
-
 
 
   // sign in with google

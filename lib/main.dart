@@ -1,32 +1,32 @@
+import 'package:duty_allocation_system/providers/duty_provider.dart';
+import 'package:duty_allocation_system/providers/employee_provider.dart';
 import 'package:duty_allocation_system/providers/user_provider.dart';
+import 'package:duty_allocation_system/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'providers/employee_provider.dart';
-import 'views/screens/authentication/auth_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load(fileName: ".env");
+  await Firebase.initializeApp();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeRight,
     DeviceOrientation.landscapeLeft
   ]);
 
-  await Supabase.initialize(
-    url: dotenv.env['APPURL'].toString(),
-    anonKey: dotenv.env['APPANONKEY'].toString(),
-  );
+
 
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => EmployeeProvider()),
+        ChangeNotifierProvider(create: (context) => DutyProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => EmployeeProvider())
       ],
       child: MyApp(),
     ),
@@ -39,7 +39,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: AuthHandler(),
+      home: SplashScreen(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

@@ -1,9 +1,10 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'dart:io';
-import '../models/employee_model.dart';
+import '../models/duty_model.dart';
 
 class Helpers {
   // Method to navigate to another screen with back function
@@ -16,13 +17,18 @@ class Helpers {
   /// This function completely deletes the previous screen from the context hence the back key completely exits the app
   static void permanentNavigator(BuildContext context, Widget nextScreen) {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (c) => nextScreen));
+       context, MaterialPageRoute(builder: (c) => nextScreen)
+    );
+  }
+
+  static void back(BuildContext context){
+    Navigator.pop(context);
   }
 
 
   //Method to add employees To the Roster
-  static  addToRoster( String selectedEmployee, String selectedDept, List selectedDutyOptions, ) {
-    Employee newEmployee = Employee(
+  static  addToRoster( String selectedEmployee, String selectedDept, List selectedDutyOptions, int? owing) {
+    DutyModel newEmployee = DutyModel(
         name: selectedEmployee ?? '',
         role: 'RGN',
         department: selectedDept ?? '',
@@ -33,7 +39,7 @@ class Helpers {
         friday: selectedDutyOptions[4],
         saturday: selectedDutyOptions[5],
         sunday: selectedDutyOptions[6],
-        owing: 2
+        owing: owing ?? 0
     );
 
     selectedDutyOptions = List.filled(7, "all day");
@@ -42,9 +48,11 @@ class Helpers {
   }
 
 
-  // Method to save table as PDF
-  static Future<void> saveAsPDF(List<Employee> employees, var tableData) async {
+// Method to save table as PDF
+  static Future<String> saveAsPDF(List<DutyModel> employees, var tableData) async {
+    String? saveLocation;
     final pdf = pw.Document();
+
 
     pdf.addPage(
       pw.MultiPage(
@@ -109,7 +117,7 @@ class Helpers {
               'Owing'
             ],
             headerStyle:
-                pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10),
+            pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10),
             headerAlignment: pw.Alignment.center,
             cellAlignment: pw.Alignment.center,
             headerHeight: 40,
@@ -122,9 +130,20 @@ class Helpers {
       ),
     );
 
-    final output = await getExternalStorageDirectory();
-    print("External Storage Directory: ${output?.path}");
-    final file = File("${output?.path}/duty_allocation.pdf");
-    await file.writeAsBytes(await pdf.save());
+    // Let the user pick a directory to save the file
+    final String? directory = await FilePicker.platform.getDirectoryPath();
+    if (directory != null) {
+      const fileName = 'duty_allocation.pdf';
+      final filePath = path.join(directory, fileName);
+      final File file = File(filePath);
+      await file.writeAsBytes(await pdf.save());
+
+      saveLocation = filePath;
+
+    }
+
+    return saveLocation!;
   }
+
+
 }

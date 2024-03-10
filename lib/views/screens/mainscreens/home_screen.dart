@@ -1,45 +1,64 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:duty_allocation_system/helpers/helper_methods.dart';
 import 'package:duty_allocation_system/providers/user_provider.dart';
+import 'package:duty_allocation_system/utils/colors/pallete.dart';
+import 'package:duty_allocation_system/views/screens/employee_manager/employee_manager.dart';
 import 'package:duty_allocation_system/views/screens/mainscreens/duty_allocation_screen.dart';
+import 'package:duty_allocation_system/views/screens/profile/profile_screen.dart';
 import 'package:duty_allocation_system/views/widgets/home_options.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../widgets/drawer.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import '../../../utils/asset_utils/assets_util.dart';
+import '../../widgets/my_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
     return Consumer<UserProvider>(
       builder: (context, userProvider, _) {
         return Scaffold(
-          drawer: MyDrawer(),
+          drawer: MyDrawer(user: user,),
           appBar: AppBar(
-            backgroundColor: Colors.black87,
-            automaticallyImplyLeading: false,
+            iconTheme: const IconThemeData(color: Colors.white),
+            backgroundColor: Pallete.primaryColor,
             title: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration:
-                  const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                  child: const CircleAvatar(
-                    backgroundColor: Colors.grey,
-                    radius: 20,
-                  ),
-                ),
                 Text(
-                  userProvider.user == null ? '' : "${userProvider.user!.email}",
+                  user == null ? '' : "${user.displayName}",
                   style: const TextStyle(
                       color: Colors.white, fontWeight: FontWeight.bold),
-                )
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                ClipOval(
+                  child: CachedNetworkImage(
+                    imageUrl: user!.photoURL ?? 'https://cdn-icons-png.flaticon.com/128/3177/3177440.png',
+                    width: 45,
+                    height: 45,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Skeletonizer(
+                      enabled: true,
+                      child: SizedBox(
+                        height: 45,
+                        child: Image.asset(Assets.blueProfileImage),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                    const Icon(Icons.error),
+                  ),
+                ),
               ],
             ),
           ),
           body: Padding(
-            padding: const EdgeInsets.only(right: 12, bottom: 12),
+            padding: const EdgeInsets.only(right: 24, bottom: 24),
             child: Column(
               children: [
                 Expanded(
@@ -47,8 +66,9 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       HomeOption(
                         onTap: () => Helpers.temporaryNavigator(
-                            context, const DutyAllocationScreen()),
-                        backgroundImage: const AssetImage('assets/images/duty.png'),
+                            context, const DutyAllocationScreen()
+                        ),
+                        backgroundImage: AssetImage(Assets.duty),
                         alignment: Alignment.centerLeft,
                         text: const Text(
                           'Create\nDuty',
@@ -62,8 +82,10 @@ class HomeScreen extends StatelessWidget {
                         backgroundColor: Colors.blueAccent,
                       ),
                       HomeOption(
-                          onTap: () {},
-                          backgroundImage: const AssetImage('assets/images/nurses.png'),
+                          onTap: () {
+                            Helpers.temporaryNavigator(context, const EmployeeManager());
+                          },
+                          backgroundImage: AssetImage(Assets.employees),
                           alignment: Alignment.centerRight,
                           text: const Text(
                             'Manage\nEmployees',
@@ -82,7 +104,7 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       HomeOption(
                           onTap: () {},
-                          backgroundImage: const AssetImage('assets/images/settings.png'),
+                          backgroundImage: AssetImage(Assets.settings),
                           alignment: Alignment.centerLeft,
                           text: const Text(
                             'Settings',
@@ -94,8 +116,10 @@ class HomeScreen extends StatelessWidget {
                           columnCrossAxisAlignment: CrossAxisAlignment.end,
                           backgroundColor: Colors.purpleAccent),
                       HomeOption(
-                        onTap: () {},
-                        backgroundImage: const AssetImage('assets/images/me.png'),
+                        onTap: () {
+                          Helpers.temporaryNavigator(context, const ProfileScreen());
+                        },
+                        backgroundImage: AssetImage(Assets.homeProfile),
                         alignment: Alignment.centerRight,
                         text: const Text(
                           'Profile',

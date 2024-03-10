@@ -1,18 +1,17 @@
+import 'package:duty_allocation_system/views/screens/authorization_screens/resend_reset_email_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:platform_x_universal/api_services/auth_methods/authorization_services.dart';
-import 'package:platform_x_universal/global/global.dart';
-import 'package:platform_x_universal/helpers/genenal_helpers.dart';
-import 'package:platform_x_universal/views/screens/universal_screens/authorization_screens/auth_handler.dart';
-import 'package:platform_x_universal/views/screens/universal_screens/authorization_screens/resend_reset_email_screen.dart';
-import '../../../../utils/asset_utils/assets_util.dart';
-import '../../../../utils/colors/pallete.dart';
-import '../../../widgets/custom_button.dart';
-import '../../../widgets/loading_widgets/custom_loader.dart';
-import '../../../widgets/custom_text_field.dart';
+
+import '../../../api_services/auth_methods/authorization_services.dart';
+import '../../../helpers/helper_methods.dart';
+import '../../../utils/asset_utils/assets_util.dart';
+import '../../../utils/colors/pallete.dart';
+import '../../widgets/custom_button.dart';
+import '../../widgets/custom_text_field.dart';
+import '../../widgets/loading_widgets/custom_loader.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
 

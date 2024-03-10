@@ -1,10 +1,9 @@
+import 'package:duty_allocation_system/views/screens/mainscreens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:platform_x_universal/helpers/auth_helpers.dart';
-import 'package:platform_x_universal/views/screens/agent_module/mainscreen/agent_mainscreen.dart';
 import 'package:provider/provider.dart';
-import '../../../../global/global.dart';
 import '../../../../providers/user_provider.dart';
+import '../../../helpers/auth_helpers.dart';
 import 'login.dart';
 
 class AuthHandler extends StatelessWidget {
@@ -26,9 +25,9 @@ class AuthHandler extends StatelessWidget {
               AuthHelpers.handleEmailVerification(context, user);
             }
           });
-          return AuthHelpers.getSelectedUserRole();
+          return HomeScreen();
         } else {
-          return userRole != null ? const Login() : AuthHelpers.getSelectedUserRole();
+          return Login();
         }
       },
     );
