@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:duty_allocation_system/utils/asset_utils/assets_util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../helpers/helper_methods.dart';
@@ -14,17 +15,17 @@ class TablePreviewScreen extends StatefulWidget {
 }
 
 class _TablePreviewScreenState extends State<TablePreviewScreen> {
-  var employee_duty_Provider;
+  late DutyProvider employeeDutyProvider;
 
   @override
   Widget build(BuildContext context) {
-    employee_duty_Provider = Provider.of<DutyProvider>(context);
+    employeeDutyProvider = Provider.of<DutyProvider>(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: Colors.black87,
+        backgroundColor: Pallete.primaryColor,
         title: const Text(
           'Preview Duties',
           style: TextStyle(
@@ -42,34 +43,47 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    DataTable(
-                      border: TableBorder.all(
-                        width: 2
+                child: SizedBox(
+                  width: MediaQuery.sizeOf(context).width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+
+                      Image.asset(
+                        Assets.splashLogo,
+                        height: 150,
                       ),
-                      headingTextStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
+
+                      const SizedBox(
+                        height: 16,
                       ),
-                      columnSpacing: 20,
-                      columns: const [
-                        DataColumn(label: Text('NAME')),
-                        DataColumn(label: Text('ROLE')),
-                        DataColumn(label: Text('DEPT')),
-                        DataColumn(label: Text('MONDAY')),
-                        DataColumn(label: Text('TUESDAY')),
-                        DataColumn(label: Text('WEDNESDAY')),
-                        DataColumn(label: Text('THURSDAY')),
-                        DataColumn(label: Text('FRIDAY')),
-                        DataColumn(label: Text('SATURDAY')),
-                        DataColumn(label: Text('SUNDAY')),
-                        DataColumn(label: Text('OWING')),
-                        DataColumn(label: Text('ACTION')), // Added column for delete button
-                      ],
-                      rows: _buildRows(employee_duty_Provider.selectedEmployees),
-                    ),
-                  ],
+
+                      DataTable(
+                        border: TableBorder.all(
+                          width: 2
+                        ),
+                        headingTextStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                        columnSpacing: 20,
+                        columns: const [
+                          DataColumn(label: Text('NAME')),
+                          DataColumn(label: Text('ROLE')),
+                          DataColumn(label: Text('DEPT')),
+                          DataColumn(label: Text('MONDAY')),
+                          DataColumn(label: Text('TUESDAY')),
+                          DataColumn(label: Text('WEDNESDAY')),
+                          DataColumn(label: Text('THURSDAY')),
+                          DataColumn(label: Text('FRIDAY')),
+                          DataColumn(label: Text('SATURDAY')),
+                          DataColumn(label: Text('SUNDAY')),
+                          DataColumn(label: Text('OWING')),
+                          DataColumn(label: Text('ACTION')), // Added column for delete button
+                        ],
+                        rows: _buildRows(employeeDutyProvider.selectedEmployees),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -86,11 +100,14 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
                   width: 200,
                   btnColor: Pallete.primaryColor,
                   borderRadius: 10,
-                  child: Text(
-                    'Save as PDF'
+                  child: const Text(
+                    'Save as PDF',
+                    style: TextStyle(
+                      color: Colors.white
+                    ),
                   ),
                   onTap: () async{
-                    String saveLocation = await Helpers.saveAsPDF(employee_duty_Provider.selectedEmployees, _buildTableData(employee_duty_Provider.selectedEmployees));
+                    String saveLocation = await Helpers.saveAsPDF(employeeDutyProvider.selectedEmployees, _buildTableData(employeeDutyProvider.selectedEmployees));
 
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -116,8 +133,11 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
                   width: 200,
                   btnColor: Pallete.primaryColor,
                   borderRadius: 10,
-                  child: Text(
-                      'Save and Email PDF'
+                  child: const Text(
+                    'Save and Email PDF',
+                    style: TextStyle(
+                        color: Colors.white
+                    ),
                   ),
                   onTap: () {
 
@@ -165,7 +185,7 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
 
   void _deleteEmployee(DutyModel employee_duty) {
     setState(() {
-      employee_duty_Provider.removeEmployeeFromRoster(employee_duty);
+      employeeDutyProvider.removeEmployeeFromRoster(employee_duty);
     });
   }
 

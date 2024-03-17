@@ -1,13 +1,13 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:duty_allocation_system/api_services/employee_methods/employee.dart';
 import 'package:duty_allocation_system/helpers/helper_methods.dart';
+import 'package:duty_allocation_system/models/employee_model.dart';
+import 'package:duty_allocation_system/utils/colors/pallete.dart';
 import 'package:duty_allocation_system/views/widgets/custom_button.dart';
 import 'package:duty_allocation_system/views/widgets/custom_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../models/duty_model.dart';
 import '../../../providers/duty_provider.dart';
-import '../../widgets/custom_snackbar.dart';
 import 'table_preview_screen.dart';
 
 class DutyAllocationScreen extends StatefulWidget {
@@ -47,13 +47,13 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
   @override
   void initState() {
     super.initState();
-    getName(); // Call getName to fetch employee names
+    getName();
   }
 
   getName() async {
-    var names = await EmployeeServices.getAllDeptEmployees(dept: 'Wards');
+    List<EmployeeModel> names = await EmployeeServices.getAllDeptEmployees(dept: 'Wards');
     setState(() {
-      employeeNames = names.cast<String>(); // Assign the fetched names to employeeNames
+      employeeNames = names.map((employee) => "${employee.firstName[0]}. ${employee.lastName}" ).toList();
     });
   }
 
@@ -106,12 +106,11 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
         }
 
       },
-
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.white),
-          backgroundColor: Colors.black87,
+          backgroundColor: Pallete.primaryColor,
           title: Text(
             'Assign Duties',
             style: TextStyle(
@@ -123,7 +122,8 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(24.0),
-          child: ListView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -378,8 +378,12 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
                         child: Column(
                           children: [
 
+                            SizedBox(
+                              height: 12,
+                            ),
+
                             CustomButton(
-                              btnColor: Colors.white,
+                              btnColor: Colors.green,
                               width: 200,
                               borderRadius: 10,
                               onTap: () {
@@ -440,20 +444,34 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
                                 }
                               },
                               child: Text(
-                                'Add to Rooster'
+                                'Add to Rooster',
+                                style: TextStyle(
+                                    color: Colors.white
+                                ),
                               ),
                             ),
 
+                            SizedBox(
+                              height: 12,
+                            ),
+
                             CustomButton(
-                              btnColor: Colors.white,
+                              btnColor: Pallete.primaryColor,
                               width: 200,
                               borderRadius: 10,
                               onTap: () {
                                 Helpers.temporaryNavigator(context, const TablePreviewScreen());
                               },
                               child: Text(
-                                  'Add to Rooster'
+                                'Preview Duty',
+                                style: TextStyle(
+                                  color: Colors.white
+                                ),
                               ),
+                            ),
+
+                            SizedBox(
+                              height: 12,
                             ),
 
                           ],

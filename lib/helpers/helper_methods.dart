@@ -1,5 +1,8 @@
+import 'dart:typed_data';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -47,11 +50,16 @@ class Helpers {
     return newEmployee;
   }
 
+  static Future<Uint8List> _loadLogoImage() async {
+    final ByteData data = await rootBundle.load('assets/images/logo.png');
+    return data.buffer.asUint8List();
+  }
 
 // Method to save table as PDF
   static Future<String> saveAsPDF(List<DutyModel> employees, var tableData) async {
     String? saveLocation;
     final pdf = pw.Document();
+    final logoImage = await _loadLogoImage();
 
 
     pdf.addPage(
@@ -63,43 +71,34 @@ class Helpers {
           marginBottom: 20.0,
         ),
         header: (pw.Context context) {
-          return pw.Column(children: [
+          return pw.Column(
+           children: [
             pw.Row(
-                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: pw.MainAxisAlignment.center,
                 children: [
-                  pw.Text(
-                    'FROM:...............................................................',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                  ),
-                  pw.Text(
-                    'TO:.................................................................',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                  ),
-                ]),
+                  pw.Image(
+                    pw.MemoryImage(logoImage),
+                    width: 100,
+                    height: 100,
+                  )
+                ]
+            ),
             pw.SizedBox(height: 12),
-            pw.Row(
-                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
-                children: [
-                  pw.Text(
-                    'Compiled By:.......................................................',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                  ),
-                  pw.Text(
-                    'Date:..............................................................',
-                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-                  ),
-                ]),
+             pw.Row(
+                 mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                 children: [
+                   pw.Text(
+                     'FROM:...............................................................',
+                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                   ),
+                   pw.Text(
+                     'TO:.................................................................',
+                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                   ),
+                 ]
+             ),
             pw.SizedBox(height: 12),
           ]);
-        },
-        footer: (pw.Context context) {
-          return pw.Container(
-            alignment: pw.Alignment.centerLeft,
-            child: pw.Text(
-              'Comment:...................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................',
-              style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
-            ),
-          );
         },
         build: (context) => [
           pw.TableHelper.fromTextArray(
