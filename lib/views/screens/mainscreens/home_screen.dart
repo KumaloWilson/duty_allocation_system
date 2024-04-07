@@ -70,12 +70,12 @@ class HomeScreen extends StatelessWidget {
                         ),
                         backgroundImage: AssetImage(Assets.duty),
                         alignment: Alignment.centerLeft,
-                        text: const Text(
+                        text: Text(
                           'Create\nDuty',
                           textAlign: TextAlign.end,
                           style: TextStyle(
                               color: Colors.black,
-                              fontSize: 20,
+                              fontSize: MediaQuery.sizeOf(context).height > 400 ? 20 : 14,
                               fontWeight: FontWeight.bold),
                         ),
                         columnCrossAxisAlignment: CrossAxisAlignment.end,
@@ -87,11 +87,11 @@ class HomeScreen extends StatelessWidget {
                           },
                           backgroundImage: AssetImage(Assets.employees),
                           alignment: Alignment.centerRight,
-                          text: const Text(
+                          text: Text(
                             'Manage\nEmployees',
                             style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 20,
+                                fontSize: MediaQuery.sizeOf(context).height > 400 ? 20 : 14,
                                 fontWeight: FontWeight.bold),
                           ),
                           columnCrossAxisAlignment: CrossAxisAlignment.start,
@@ -106,12 +106,13 @@ class HomeScreen extends StatelessWidget {
                           onTap: () {},
                           backgroundImage: AssetImage(Assets.settings),
                           alignment: Alignment.centerLeft,
-                          text: const Text(
+                          text: Text(
                             'Settings',
                             style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
+                                fontSize: MediaQuery.sizeOf(context).height > 400 ? 20 : 14,
+                                fontWeight: FontWeight.bold
+                            ),
                           ),
                           columnCrossAxisAlignment: CrossAxisAlignment.end,
                           backgroundColor: Colors.purpleAccent),
@@ -121,11 +122,11 @@ class HomeScreen extends StatelessWidget {
                         },
                         backgroundImage: AssetImage(Assets.homeProfile),
                         alignment: Alignment.centerRight,
-                        text: const Text(
+                        text: Text(
                           'Profile',
                           style: TextStyle(
                               color: Colors.black,
-                              fontSize: 20,
+                              fontSize: MediaQuery.sizeOf(context).height > 400 ? 20 : 14,
                               fontWeight: FontWeight.bold),
                         ),
                         backgroundColor: Colors.redAccent,

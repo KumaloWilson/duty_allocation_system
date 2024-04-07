@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'dart:io';
@@ -24,16 +25,25 @@ class Helpers {
     );
   }
 
+  /// This methods capitalizes the first word of a [String]
+  static String capitalizeFirstLetter(String input) {
+    if (input.isEmpty) {
+      return input;
+    }
+    return input.substring(0, 1).toUpperCase() + input.substring(1);
+  }
+
+
   static void back(BuildContext context){
     Navigator.pop(context);
   }
 
 
   //Method to add employees To the Roster
-  static  addToRoster( String selectedEmployee, String selectedDept, List selectedDutyOptions, int? owing) {
+  static  addToRoster({required String selectedEmployee, required String selectedDept, required String employeeRole, required List selectedDutyOptions, required int? owing}){
     DutyModel newEmployee = DutyModel(
         name: selectedEmployee ?? '',
-        role: 'RGN',
+        role: employeeRole,
         department: selectedDept ?? '',
         monday: selectedDutyOptions[0],
         tuesday: selectedDutyOptions[1],
@@ -83,6 +93,21 @@ class Helpers {
                   )
                 ]
             ),
+             pw.SizedBox(
+               height: 2
+             ),
+             pw.Row(
+                 mainAxisAlignment: pw.MainAxisAlignment.center,
+                 children: [
+                   pw.Text(
+                     'ST JOSEPH`S MISSION HOSPITAL DUTY',
+                     style: pw.TextStyle(
+                       fontWeight: pw.FontWeight.bold,
+                       fontSize: 12
+                     )
+                   )
+                 ]
+             ),
             pw.SizedBox(height: 12),
              pw.Row(
                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -106,22 +131,21 @@ class Helpers {
               'Name',
               'Role',
               'Dept',
-              'Monday',
-              'Tuesday',
-              'Wednesday',
-              'Thursday',
-              'Friday',
-              'Saturday',
-              'Sunday',
+              'MON',
+              'TUE',
+              'WED',
+              'THUR',
+              'FRI',
+              'SAT',
+              'SUN',
               'Owing'
             ],
-            headerStyle:
-            pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10),
+            headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10),
             headerAlignment: pw.Alignment.center,
             cellAlignment: pw.Alignment.center,
             headerHeight: 40,
             cellHeight: 30,
-            cellStyle: const pw.TextStyle(fontSize: 10),
+            cellStyle: const pw.TextStyle(fontSize: 9),
             headerPadding: pw.EdgeInsets.zero,
             data: tableData,
           ),
@@ -130,10 +154,12 @@ class Helpers {
     );
 
     // Let the user pick a directory to save the file
-    final String? directory = await FilePicker.platform.getDirectoryPath();
-    if (directory != null) {
-      const fileName = 'duty_allocation.pdf';
-      final filePath = path.join(directory, fileName);
+    final Directory? downloadsDir = await getDownloadsDirectory();
+    if (downloadsDir != null) {
+      final DateTime now = DateTime.now();
+      final String formattedDate = '${now.year}-${now.month}-${now.day}';
+      final String fileName = '$formattedDate duty_allocation.pdf';
+      final filePath = path.join(downloadsDir.path, fileName);
       final File file = File(filePath);
       await file.writeAsBytes(await pdf.save());
 

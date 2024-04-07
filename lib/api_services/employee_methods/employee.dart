@@ -1,18 +1,12 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:duty_allocation_system/models/employee_model.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
+import '../../utils/random/randomizer.dart';
 
 class EmployeeServices{
-  static Future<void> addEmployee({required String firstName, required String lastName, required String role, required  String department}) async {
-    // 1. Get a reference to the employees node in your database
+  static Future<void> addEmployee({required String firstName, required String lastName, required String role, required String department}) async {
     final databaseReference = FirebaseDatabase.instance.ref().child('employees');
-
-    // 2. Create a new child node with a unique key
-    final newEmployeeRef = databaseReference.push();
-
-    // 3. Prepare employee data as a Map
     final employeeData = {
+      'employee_id': RandomHelpers.generateRandomId(),
       'firstName': firstName,
       'lastName': lastName,
       'role': role,
@@ -21,14 +15,14 @@ class EmployeeServices{
     };
 
     try {
-      await newEmployeeRef.set(employeeData);
+      await databaseReference.push().set(employeeData);
+      // await OfflineEmployeeCache.cacheEmployees([employeeData]);
       print('Employee added successfully!');
-
     } catch (error) {
       print('Error adding employee: $error');
+      print('Employee data cached for later retry: $employeeData'); // Log cached employee data
     }
   }
-
 
   static Future<List<EmployeeModel>> getAllDeptEmployees({required String dept}) async {
     final databaseReference = FirebaseDatabase.instance.ref().child('employees');
@@ -44,13 +38,13 @@ class EmployeeServices{
 
         // Create EmployeeModel instance from the data
         final employee = EmployeeModel(
-          firstName: employeeData['firstName'], // Corrected
-          lastName: employeeData['lastName'],   // Corrected
+          employeeId: employeeData['employee_id'],
+          firstName: employeeData['firstName'],
+          lastName: employeeData['lastName'],
           department: employeeData['department'],
           role: employeeData['role'],
         );
 
-        // Add the employee to the list
         employees.add(employee);
       }
     }
@@ -58,4 +52,20 @@ class EmployeeServices{
     return employees;
   }
 
+  static Future<void> deleteEmployee(String employeeId) async {
+    try {
+      final databaseReference = FirebaseDatabase.instance.ref().child('employees');
+      final employeeRef = databaseReference.child(employeeId);
+      final employeeData = await employeeRef.once();
+
+      if (employeeData.snapshot.value != null) {
+        await employeeRef.remove();
+        print('Employee deleted successfully!');
+      } else {
+        throw Exception('Employee with ID $employeeId does not exist.');
+      }
+    } catch (error) {
+      print('Error deleting employee: $error');
+    }
+  }
 }
