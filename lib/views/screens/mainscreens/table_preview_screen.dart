@@ -1,12 +1,13 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:duty_allocation_system/utils/asset_utils/assets_util.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:duty_allocation_system/utils/asset_utils/assets_util.dart';
 import '../../../helpers/helper_methods.dart';
 import '../../../models/duty_model.dart';
 import '../../../providers/duty_provider.dart';
 import '../../../utils/colors/pallete.dart';
 import '../../widgets/custom_button.dart';
+
 class TablePreviewScreen extends StatefulWidget {
   const TablePreviewScreen({Key? key}) : super(key: key);
 
@@ -16,6 +17,7 @@ class TablePreviewScreen extends StatefulWidget {
 
 class _TablePreviewScreenState extends State<TablePreviewScreen> {
   late DutyProvider employeeDutyProvider;
+  bool _isSorted = false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,39 +31,31 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
         title: const Text(
           'Preview Duties',
           style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(24.0),
-        child:  ListView(
+        child: ListView(
           children: [
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SingleChildScrollView(
                 child: SizedBox(
-                  width: MediaQuery.sizeOf(context).width,
+                  width: MediaQuery.of(context).size.width,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-
                       Image.asset(
                         Assets.splashLogo,
                         height: 150,
                       ),
-
-                      const SizedBox(
-                        height: 16,
-                      ),
-
+                      const SizedBox(height: 16),
                       DataTable(
-                        border: TableBorder.all(
-                          width: 2
-                        ),
+                        border: TableBorder.all(width: 2),
                         headingTextStyle: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -78,21 +72,18 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
                           DataColumn(label: Text('SATURDAY')),
                           DataColumn(label: Text('SUNDAY')),
                           DataColumn(label: Text('OWING')),
-                          DataColumn(label: Text('ACTION')), // Added column for delete button
+                          DataColumn(label: Text('ACTION')),
                         ],
-                        rows: _buildRows(employeeDutyProvider.selectedEmployees),
+                        rows: _isSorted
+                            ? _buildSortedRows(employeeDutyProvider.selectedEmployees)
+                            : _buildRows(employeeDutyProvider.selectedEmployees),
                       ),
                     ],
                   ),
                 ),
               ),
             ),
-
-            const SizedBox(
-              height: 32,
-            ),
-
-
+            const SizedBox(height: 32),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -101,51 +92,45 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
                   btnColor: Pallete.primaryColor,
                   borderRadius: 10,
                   child: const Text(
-                    'Save as PDF',
-                    style: TextStyle(
-                      color: Colors.white
-                    ),
+                    'Sort Table',
+                    style: TextStyle(color: Colors.white),
                   ),
-                  onTap: () async{
-                    String saveLocation = await Helpers.saveAsPDF(employeeDutyProvider.selectedEmployees, _buildTableData(employeeDutyProvider.selectedEmployees));
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          elevation: 0,
-                          behavior: SnackBarBehavior.floating,
-                          backgroundColor: Colors.transparent,
-                          content: AwesomeSnackbarContent(
-                            title: 'File Saved Successfully',
-                            message: 'Location: $saveLocation',
-
-                            contentType: ContentType.success,
-                          ),
-                        )
-                    );
+                  onTap: () {
+                    setState(() {
+                      _isSorted = true;
+                    });
                   },
                 ),
-
-                const SizedBox(
-                  width: 32,
-                ),
-
+                const SizedBox(width: 32),
                 CustomButton(
                   width: 200,
                   btnColor: Pallete.primaryColor,
                   borderRadius: 10,
                   child: const Text(
-                    'Save and Email PDF',
-                    style: TextStyle(
-                        color: Colors.white
-                    ),
+                    'Save as PDF',
+                    style: TextStyle(color: Colors.white),
                   ),
-                  onTap: () {
+                  onTap: () async {
+                    String saveLocation = await Helpers.saveAsPDF(
+                        employeeDutyProvider.selectedEmployees,
+                        _buildTableData(employeeDutyProvider.selectedEmployees));
 
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        elevation: 0,
+                        behavior: SnackBarBehavior.floating,
+                        backgroundColor: Colors.transparent,
+                        content: AwesomeSnackbarContent(
+                          title: 'File Saved Successfully',
+                          message: 'Location: $saveLocation',
+                          contentType: ContentType.success,
+                        ),
+                      ),
+                    );
                   },
                 ),
               ],
             ),
-
           ],
         ),
       ),
@@ -183,28 +168,58 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
     return rows;
   }
 
-  void _deleteEmployee(DutyModel employee_duty) {
+  List<DataRow> _buildSortedRows(List<DutyModel> employees) {
+    // Sort employees based on department and role
+    employees.sort((a, b) {
+      // Custom sorting logic
+      if (a.department == b.department) {
+        // If departments are the same, sort by role
+        return _compareAndSortRoles(a.role, b.role);
+      } else {
+        // Otherwise, sort by department
+        return _compareAndSortDepartments(a.department, b.department);
+      }
+    });
+
+    return _buildRows(employees);
+  }
+
+  int _compareAndSortDepartments(String departmentA, String departmentB) {
+    // Define the order of departments
+    List<String> departmentOrder = ['Ward', 'OPD Peads', 'OPD Adults'];
+    // Compare departments based on their index in the order list
+    return departmentOrder.indexOf(departmentA) - departmentOrder.indexOf(departmentB);
+  }
+
+  int _compareAndSortRoles(String roleA, String roleB) {
+    // Define the order of roles
+    List<String> roleOrder = ['RGN', 'Nurse Aids', 'Students'];
+    // Compare roles based on their index in the order list
+    return roleOrder.indexOf(roleA) - roleOrder.indexOf(roleB);
+  }
+
+  void _deleteEmployee(DutyModel employeeDuty) {
     setState(() {
-      employeeDutyProvider.removeEmployeeFromRoster(employee_duty);
+      employeeDutyProvider.removeEmployeeFromRoster(employeeDuty);
     });
   }
 
-  List<List<String>> _buildTableData(List<DutyModel> employee_duties) {
+  List<List<String>> _buildTableData(List<DutyModel> employeeDuties) {
     List<List<String>> tableData = [];
 
-    for (var employee_duty in employee_duties) {
+    for (var employeeDuty in employeeDuties) {
       tableData.add([
-        employee_duty.name,
-        employee_duty.role,
-        employee_duty.department,
-        employee_duty.monday,
-        employee_duty.tuesday,
-        employee_duty.wednesday,
-        employee_duty.thursday,
-        employee_duty.friday,
-        employee_duty.saturday,
-        employee_duty.sunday,
-        employee_duty.owing.toString()
+        employeeDuty.name,
+        employeeDuty.role,
+        employeeDuty.department,
+        employeeDuty.monday,
+        employeeDuty.tuesday,
+        employeeDuty.wednesday,
+        employeeDuty.thursday,
+        employeeDuty.friday,
+        employeeDuty.saturday,
+        employeeDuty.sunday,
+        employeeDuty.owing.toString()
       ]);
     }
 
