@@ -30,7 +30,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(create: (context) => EmployeeProvider())
       ],
-      child: MyApp(),
+      child: const MyApp(),
     ),
   );
 }

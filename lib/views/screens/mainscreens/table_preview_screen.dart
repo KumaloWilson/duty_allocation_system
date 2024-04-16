@@ -22,7 +22,6 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
   @override
   Widget build(BuildContext context) {
     employeeDutyProvider = Provider.of<DutyProvider>(context);
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -287,14 +286,14 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
 
   int _compareAndSortDepartments(String departmentA, String departmentB) {
     // Define the order of departments
-    List<String> departmentOrder = ['Ward', 'OPD Peads', 'OPD Adults'];
+    List<String> departmentOrder = ['Ward', 'OPD Peads', 'OPD Adults', 'TB Corner', ' '];
     // Compare departments based on their index in the order list
     return departmentOrder.indexOf(departmentA) - departmentOrder.indexOf(departmentB);
   }
 
   int _compareAndSortRoles(String roleA, String roleB) {
     // Define the order of roles
-    List<String> roleOrder = ['RGN', 'Nurse Aids', 'Students'];
+    List<String> roleOrder = ['RGN', 'Nurse Aid', 'Gen Hand','Student',];
     // Compare roles based on their index in the order list
     return roleOrder.indexOf(roleA) - roleOrder.indexOf(roleB);
   }

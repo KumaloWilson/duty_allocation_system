@@ -44,7 +44,7 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
     " ",
     "OPD Peads",
     "OPD Adults",
-    "Wards",
+    "Ward",
     "TB Corner"
   ];
 

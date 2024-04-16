@@ -54,9 +54,7 @@ class Helpers {
         sunday: selectedDutyOptions[6],
         owing: owing ?? 0
     );
-
-    selectedDutyOptions = List.filled(7, "all day");
-
+    selectedDutyOptions = List.filled(7, "E");
     return newEmployee;
   }
 
@@ -70,7 +68,6 @@ class Helpers {
     String? saveLocation;
     final pdf = pw.Document();
     final logoImage = await _loadLogoImage();
-
 
     pdf.addPage(
       pw.MultiPage(
@@ -88,8 +85,8 @@ class Helpers {
                 children: [
                   pw.Image(
                     pw.MemoryImage(logoImage),
-                    width: 100,
-                    height: 100,
+                    width: 50,
+                    height: 50,
                   )
                 ]
             ),
@@ -131,20 +128,20 @@ class Helpers {
               'Name',
               'Role',
               'Dept',
-              'MON',
-              'TUE',
-              'WED',
-              'THUR',
-              'FRI',
-              'SAT',
-              'SUN',
+              'Mon',
+              'Tue',
+              'Wed',
+              'Thur',
+              'Fri',
+              'Sat',
+              'Sun',
               'Owing'
             ],
             headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10),
             headerAlignment: pw.Alignment.center,
             cellAlignment: pw.Alignment.center,
-            headerHeight: 40,
-            cellHeight: 30,
+            headerHeight: 30,
+            cellHeight: 20,
             cellStyle: const pw.TextStyle(fontSize: 9),
             headerPadding: pw.EdgeInsets.zero,
             data: tableData,

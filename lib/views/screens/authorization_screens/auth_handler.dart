@@ -25,9 +25,9 @@ class AuthHandler extends StatelessWidget {
               AuthHelpers.handleEmailVerification(context, user);
             }
           });
-          return HomeScreen();
+          return const HomeScreen();
         } else {
-          return Login();
+          return const Login();
         }
       },
     );
