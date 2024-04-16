@@ -142,17 +142,118 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
     for (var employee in employees) {
       DataRow row = DataRow(
         cells: [
-          DataCell(Text(employee.name)),
+          DataCell(
+            TextFormField(
+              initialValue: employee.name,
+              onChanged: (newValue) {
+                setState(() {
+                  employee.name = newValue;
+                });
+              },
+            ),
+          ),
+
           DataCell(Text(employee.role)),
-          DataCell(Text(employee.department)),
-          DataCell(Text(employee.monday)),
-          DataCell(Text(employee.tuesday)),
-          DataCell(Text(employee.wednesday)),
-          DataCell(Text(employee.thursday)),
-          DataCell(Text(employee.friday)),
-          DataCell(Text(employee.saturday)),
-          DataCell(Text(employee.sunday)),
-          DataCell(Text(employee.owing.toString())),
+
+          DataCell(
+            TextFormField(
+              initialValue: employee.department,
+              onChanged: (newValue) {
+                setState(() {
+                  employee.department = newValue;
+                });
+              },
+            ),
+          ),
+
+          DataCell(
+            TextFormField(
+              initialValue: employee.monday,
+              onChanged: (newValue) {
+                setState(() {
+                  employee.monday = newValue;
+                });
+              },
+            ),
+          ),
+
+          DataCell(
+            TextFormField(
+              initialValue: employee.tuesday,
+              onChanged: (newValue) {
+                setState(() {
+                  employee.tuesday = newValue;
+                });
+              },
+            ),
+          ),
+
+          DataCell(
+            TextFormField(
+              initialValue: employee.wednesday,
+              onChanged: (newValue) {
+                setState(() {
+                  employee.wednesday = newValue;
+                });
+              },
+            ),
+          ),
+
+          DataCell(
+            TextFormField(
+              initialValue: employee.thursday,
+              onChanged: (newValue) {
+                setState(() {
+                  employee.thursday = newValue;
+                });
+              },
+            ),
+          ),
+
+          DataCell(
+            TextFormField(
+              initialValue: employee.friday,
+              onChanged: (newValue) {
+                setState(() {
+                  employee.friday = newValue;
+                });
+              },
+            ),
+          ),
+
+          DataCell(
+            TextFormField(
+              initialValue: employee.saturday,
+              onChanged: (newValue) {
+                setState(() {
+                  employee.saturday = newValue;
+                });
+              },
+            ),
+          ),
+
+          DataCell(
+            TextFormField(
+              initialValue: employee.sunday,
+              onChanged: (newValue) {
+                setState(() {
+                  employee.sunday = newValue;
+                });
+              },
+            ),
+          ),
+
+          DataCell(
+            TextFormField(
+              initialValue: employee.owing.toString(),
+              onChanged: (newValue) {
+                setState(() {
+                  employee.owing = int.parse(newValue);
+                });
+              },
+            ),
+          ),
+
           DataCell(
             IconButton(
               icon: const Icon(Icons.delete),
