@@ -40,7 +40,7 @@ class _EmployeeManagerState extends State<EmployeeManager> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: StreamBuilder<List<EmployeeModel>>(
-          stream: Provider.of<EmployeeProvider>(context).employeesStream,
+          stream: Provider.of<EmployeeProvider>(context).employeesManagerStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());

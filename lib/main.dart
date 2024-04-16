@@ -1,3 +1,4 @@
+import 'package:duty_allocation_system/api_services/employee_methods/employee.dart';
 import 'package:duty_allocation_system/providers/duty_provider.dart';
 import 'package:duty_allocation_system/providers/employee_provider.dart';
 import 'package:duty_allocation_system/providers/user_provider.dart';
@@ -13,6 +14,7 @@ void main() async {
 
   await dotenv.load(fileName: ".env");
   await Firebase.initializeApp();
+  await EmployeeServices.enableOfflinePersistence();
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.landscapeRight,

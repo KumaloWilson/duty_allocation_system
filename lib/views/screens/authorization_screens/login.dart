@@ -70,8 +70,19 @@ class _LoginState extends State<Login> {
                 child: ListView(
                   children: [
                     SizedBox(
-                      height: screenHeight * 0.2,
+                      height: 16,
                     ),
+                    SizedBox(
+                      height: 100,
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                      )
+                    ),
+
+                    SizedBox(
+                      height: 8,
+                    ),
+
                     Container(
                       padding: const EdgeInsets.all(20),
                       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),

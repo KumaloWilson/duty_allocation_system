@@ -28,4 +28,17 @@ class DutyProvider extends ChangeNotifier {
   void _addEmployeeToDropdown(DutyModel employee) {
     _allEmployees.add(employee);
   }
+
+  void updateEmployeeDuty(DutyModel employee) {
+    // Find the index of the employee in the list
+    int index = _selectedEmployees.indexOf(employee);
+
+    if (index != -1) {
+      // Update the employee data in the list
+      _selectedEmployees[index] = employee;
+      // Notify listeners about the change
+      notifyListeners();
+    }
+  }
 }
+

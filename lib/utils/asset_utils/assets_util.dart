@@ -20,8 +20,8 @@ class Assets {
   static String student = 'assets/images/student.png';
   static String nurse = 'assets/images/nurse.png';
   static String midwife = 'assets/images/midwife.png';
-  static String generalhand = 'assets/images/generalhand.png';
-  static String nurseaid = 'assets/images/nurse.png';
+  static String generalhand = 'assets/images/general_hand.png';
+  static String nurseaid = 'assets/images/nurse_aid.png';
 
 
 

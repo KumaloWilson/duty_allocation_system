@@ -3,10 +3,7 @@ import 'package:duty_allocation_system/helpers/helper_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:provider/provider.dart';
 import '../../../api_services/employee_methods/employee.dart';
-import '../../../models/employee_model.dart';
-import '../../../providers/employee_provider.dart';
 import '../../../utils/asset_utils/assets_util.dart';
 import '../../../utils/colors/pallete.dart';
 import '../../custom_animations/fade_in_slide_animation.dart';
@@ -262,21 +259,6 @@ class _AddEmployeeState extends State<AddEmployee> {
     );
   }
 
-  String _getImageAsset(String role) {
-    switch (role.toLowerCase()) {
-      case 'student':
-        return Assets.student;
-      case 'rgn':
-        return Assets.nurse;
-      case 'nurse aid':
-        return Assets.nurseaid;
-      case 'general hand':
-        return Assets.generalhand;
-      default:
-        return Assets.nurseaid;
-    }
-  }
-
 
   void _addEmployee() async {
     showDialog(
@@ -294,10 +276,6 @@ class _AddEmployeeState extends State<AddEmployee> {
         role: selectedRole!,
         department: selectedDept!,
       );
-
-      // Fetch updated list of employees
-      final employeeProvider = Provider.of<EmployeeProvider>(context, listen: false);
-      await employeeProvider.fetchEmployees(dept: 'ward');
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

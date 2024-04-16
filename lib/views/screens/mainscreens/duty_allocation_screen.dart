@@ -1,5 +1,4 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:duty_allocation_system/api_services/employee_methods/employee.dart';
 import 'package:duty_allocation_system/helpers/helper_methods.dart';
 import 'package:duty_allocation_system/models/employee_model.dart';
 import 'package:duty_allocation_system/utils/colors/pallete.dart';
@@ -9,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/duty_provider.dart';
 import '../../../providers/employee_provider.dart';
-import '../../widgets/custom_dropdown.dart';
+import '../../../utils/asset_utils/assets_util.dart';
 import 'table_preview_screen.dart';
 
 class DutyAllocationScreen extends StatefulWidget {
@@ -26,25 +25,30 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
   String? selectedEmployeeRole;
 
   List<String> dutyOptions = [
-    "8AM-4PM",
-    "1230-6PM",
-    "7AM-7PM",
-    "Nyt duty",
-    "Day off",
-    "Nyts off",
+    " ",
+    "E",
+    "12:30",
+    "7-7",
+    "PM",
+    "AM",
+    "N.D",
+    "D.O",
+    "N.0",
     "Sick Leave",
     "Vac Leave",
     "Ann Leave",
-    "Study Leave",
+    "Sty Leave",
   ];
 
   List<String> deptOptions = [
-    "OPD PEADS",
+    " ",
+    "OPD Peads",
     "OPD Adults",
     "Wards",
+    "TB Corner"
   ];
 
-  List<String> selectedDutyOptions = List.filled(7, "8AM-4PM");
+  List<String> selectedDutyOptions = List.filled(7, "E");
 
   List<EmployeeModel> availableEmployees = [];
 
@@ -55,7 +59,7 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
   }
 
   void getName() {
-    Provider.of<EmployeeProvider>(context, listen: false).employeesStream.listen((List<EmployeeModel> employees) {
+    Provider.of<EmployeeProvider>(context, listen: false).employeesDutyStream.listen((List<EmployeeModel> employees) {
       setState(() {
         availableEmployees = employees;
       });
@@ -134,6 +138,17 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+
+                Image.asset(
+                  Assets.splashLogo,
+                  height: 150,
+                ),
+
+                const SizedBox(
+                  height: 16,
+                ),
+
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -189,9 +204,9 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
                                       selectedEmployeeName = newValue!;
                                     });
                                   },
-
+            
                                     //employees.map((employee) => "${employee.firstName[0]}. ${employee.lastName}").toList();
-
+            
                                   items: availableEmployees.map((EmployeeModel employee) {
                                     return DropdownMenuItem<String>(
                                       value: "${employee.firstName[0]}. ${employee.lastName}",
@@ -223,7 +238,7 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
                               const SizedBox(
                                 height: 8,
                               ),
-                              
+            
             
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -455,7 +470,9 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
             
                                     selectedEmployeeName = null;
                                     selectedDept = null;
-            
+                                    selectedDutyOptions = List.filled(7, "E");
+
+
                                     if (owingController!.text.isNotEmpty){
                                       owingController!.clear();
                                     }
@@ -504,7 +521,6 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
                               const SizedBox(
                                 height: 12,
                               ),
-            
                             ],
                           ),
                         ),

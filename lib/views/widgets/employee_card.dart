@@ -51,13 +51,13 @@ class EmployeeCard extends StatelessWidget {
 
   String _getImageAsset(String role) {
     switch (role.toLowerCase()) {
-      case 'Student'  'student':
+      case 'student':
         return Assets.student;
-      case 'RGN'  'rgn':
+      case 'rgn':
         return Assets.nurse;
-      case 'Nurse Aid'  'nurse aid':
+      case 'nurse aid':
         return Assets.nurseaid;
-      case 'General Hand'  'general hand':
+      case 'general hand':
         return Assets.generalhand;
       default:
         return Assets.nurseaid;
