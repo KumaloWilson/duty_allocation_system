@@ -272,12 +272,13 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
     // Sort employees based on department and role
     employees.sort((a, b) {
       // Custom sorting logic
-      if (a.department == b.department) {
+      final departmentComparison = _compareAndSortDepartments(a.department, b.department);
+      if (departmentComparison == 0) {
         // If departments are the same, sort by role
         return _compareAndSortRoles(a.role, b.role);
       } else {
         // Otherwise, sort by department
-        return _compareAndSortDepartments(a.department, b.department);
+        return departmentComparison;
       }
     });
 
@@ -286,17 +287,20 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
 
   int _compareAndSortDepartments(String departmentA, String departmentB) {
     // Define the order of departments
-    List<String> departmentOrder = ['Ward', 'OPD Peads', 'OPD Adults', 'TB Corner', ' '];
+    final departmentOrder = ['Ward', 'OPD Peads', 'OPD Adults', 'TB Corner', ''];
+
     // Compare departments based on their index in the order list
     return departmentOrder.indexOf(departmentA) - departmentOrder.indexOf(departmentB);
   }
 
   int _compareAndSortRoles(String roleA, String roleB) {
     // Define the order of roles
-    List<String> roleOrder = ['RGN', 'Nurse Aid', 'Gen Hand','Student',];
+    final roleOrder = ['RGN', 'Nurse Aid', 'Gen Hand', 'Student'];
+
     // Compare roles based on their index in the order list
     return roleOrder.indexOf(roleA) - roleOrder.indexOf(roleB);
   }
+
 
   void _deleteEmployee(DutyModel employeeDuty) {
     setState(() {
