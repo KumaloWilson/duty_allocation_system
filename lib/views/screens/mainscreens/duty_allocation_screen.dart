@@ -3,7 +3,9 @@ import 'package:duty_allocation_system/helpers/helper_methods.dart';
 import 'package:duty_allocation_system/models/employee_model.dart';
 import 'package:duty_allocation_system/utils/colors/pallete.dart';
 import 'package:duty_allocation_system/views/widgets/custom_button.dart';
+import 'package:duty_allocation_system/views/widgets/custom_date_picker.dart';
 import 'package:duty_allocation_system/views/widgets/custom_text_field.dart';
+import 'package:duty_allocation_system/views/widgets/date_input_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/duty_provider.dart';
@@ -23,6 +25,8 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
   String? selectedEmployeeName;
   String? selectedDept;
   String? selectedEmployeeRole;
+  TextEditingController fromDateController = TextEditingController();
+  TextEditingController toDateController = TextEditingController();
 
   List<String> dutyOptions = [
     " ",
@@ -154,146 +158,192 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
                   children: [
                     Expanded(
                       flex: 1,
-                      child: Container(
-                        margin: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                                color: Colors.grey.shade200
-                            )
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.shade300,
-                                  spreadRadius: 15,
-                                  blurRadius: 1,
-                                  offset: const Offset(-3, -3),
-                                ),
-            
-                                BoxShadow(
-                                  color: Colors.grey.shade50,
-                                  spreadRadius: 15,
-                                  blurRadius: 7,
-                                  offset: const Offset(3, 3),
-                                ),
-                              ],
-                              border: Border.all(
-                                  color: Colors.white,
-                                  width: 1
-                              )
-                          ),
-            
-                          child: Column(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                    color: Colors.grey
+                      child: Column(
+                        children: [
+
+
+                          Container(
+                            padding: EdgeInsets.all(16),
+                            child: CustomDateInputFormField(
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              format: 'dd/MM/yyyy',
+                              controller: fromDateController,
+                              scrollPadding: EdgeInsets.zero,
+                              style: TextStyle(
+                                  color: Pallete.primaryColor,
+                                  fontSize: 12
+                              ),
+                            
+                              decoration: InputDecoration(
+                                  labelText: 'FROM (dd/MM/yyyy)',
+                                  labelStyle: const TextStyle(
+                                      color: Colors.grey,
+                                    fontSize: 12
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: const BorderSide(color: Colors.grey),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: const BorderSide(color: Colors.grey),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(color: Pallete.primaryColor),
+                                  ),
+                                  contentPadding: EdgeInsets.zero,
+                                  prefixIcon: const Icon(
+                                      Icons.date_range
                                   )
-                                ),
-                                child: DropdownButton<String>(
-                                  value: selectedEmployeeName,
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      selectedEmployeeName = newValue!;
-                                    });
-                                  },
-            
-                                    //employees.map((employee) => "${employee.firstName[0]}. ${employee.lastName}").toList();
-            
-                                  items: availableEmployees.map((EmployeeModel employee) {
-                                    return DropdownMenuItem<String>(
-                                      value: "${employee.firstName[0]}. ${employee.lastName}",
-                                      child: Text(
-                                          "${employee.firstName[0]}. ${employee.lastName}"
-                                      ),
-                                      onTap: (){
-                                        selectedEmployeeRole = employee.role;
-                                      },
-                                    );
-                                  }).toList(),
-                                  isExpanded: true,
-                                  underline: const SizedBox(),
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                  iconEnabledColor: Colors.black,
-                                  icon: const Icon(Icons.arrow_drop_down),
-                                  hint: const Text(
-                                    'Name',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                  elevation: 16,
-                                  borderRadius: BorderRadius.circular(10),
-                                  dropdownColor: Colors.white,
-                                ),
                               ),
-            
-                              const SizedBox(
-                                height: 8,
-                              ),
-            
-            
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                        color: Colors.grey
-                                    )
-                                ),
-                                child: DropdownButton<String>(
-                                  value: selectedDept,
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      selectedDept = newValue!;
-                                    });
-                                  },
-                                  items: deptOptions.map((String dept) {
-                                    return DropdownMenuItem<String>(
-                                      value: dept,
-                                      child: Text(dept),
-                                    );
-                                  }).toList(),
-                                  isExpanded: true,
-                                  underline: const SizedBox(),
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                  iconEnabledColor: Colors.black,
-                                  icon: const Icon(Icons.arrow_drop_down),
-                                  hint: const Text(
-                                    'Dept',
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                  elevation: 16,
-                                  borderRadius: BorderRadius.circular(10),
-                                  dropdownColor: Colors.white,
-                                ),
-                              ),
-            
-                              const SizedBox(
-                                height: 8,
-                              ),
-            
-                              CustomTextField(
-                                controller: owingController,
-                                keyBoardType: TextInputType.number,
-                                labelText: 'Owing (Optional)',
-                                prefixIcon: const Icon(
-                                  Icons.numbers,
-                                  color: Colors.grey,
-                                )
-                              )
-                            ],
+                            ),
                           ),
-                        ),
+
+
+
+                          Container(
+                            margin: const EdgeInsets.all(24),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                    color: Colors.grey.shade200
+                                )
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.shade300,
+                                      spreadRadius: 15,
+                                      blurRadius: 1,
+                                      offset: const Offset(-3, -3),
+                                    ),
+
+                                    BoxShadow(
+                                      color: Colors.grey.shade50,
+                                      spreadRadius: 15,
+                                      blurRadius: 7,
+                                      offset: const Offset(3, 3),
+                                    ),
+                                  ],
+                                  border: Border.all(
+                                      color: Colors.white,
+                                      width: 1
+                                  )
+                              ),
+
+                              child: Column(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                        color: Colors.grey
+                                      )
+                                    ),
+                                    child: DropdownButton<String>(
+                                      value: selectedEmployeeName,
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          selectedEmployeeName = newValue!;
+                                        });
+                                      },
+
+                                        //employees.map((employee) => "${employee.firstName[0]}. ${employee.lastName}").toList();
+
+                                      items: availableEmployees.map((EmployeeModel employee) {
+                                        return DropdownMenuItem<String>(
+                                          value: "${employee.firstName[0]}. ${employee.lastName}",
+                                          child: Text(
+                                              "${employee.firstName[0]}. ${employee.lastName}"
+                                          ),
+                                          onTap: (){
+                                            selectedEmployeeRole = employee.role;
+                                          },
+                                        );
+                                      }).toList(),
+                                      isExpanded: true,
+                                      underline: const SizedBox(),
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      iconEnabledColor: Colors.black,
+                                      icon: const Icon(Icons.arrow_drop_down),
+                                      hint: const Text(
+                                        'Name',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      elevation: 16,
+                                      borderRadius: BorderRadius.circular(10),
+                                      dropdownColor: Colors.white,
+                                    ),
+                                  ),
+
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+
+
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: Colors.grey
+                                        )
+                                    ),
+                                    child: DropdownButton<String>(
+                                      value: selectedDept,
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          selectedDept = newValue!;
+                                        });
+                                      },
+                                      items: deptOptions.map((String dept) {
+                                        return DropdownMenuItem<String>(
+                                          value: dept,
+                                          child: Text(dept),
+                                        );
+                                      }).toList(),
+                                      isExpanded: true,
+                                      underline: const SizedBox(),
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      iconEnabledColor: Colors.black,
+                                      icon: const Icon(Icons.arrow_drop_down),
+                                      hint: const Text(
+                                        'Dept',
+                                        style: TextStyle(color: Colors.grey),
+                                      ),
+                                      elevation: 16,
+                                      borderRadius: BorderRadius.circular(10),
+                                      dropdownColor: Colors.white,
+                                    ),
+                                  ),
+
+                                  const SizedBox(
+                                    height: 8,
+                                  ),
+
+                                  CustomTextField(
+                                    controller: owingController,
+                                    keyBoardType: TextInputType.number,
+                                    labelText: 'Owing (Optional)',
+                                    prefixIcon: const Icon(
+                                      Icons.numbers,
+                                      color: Colors.grey,
+                                    )
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
             
@@ -381,149 +431,208 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
             
                     Expanded(
                       flex: 1,
-                      child: Container(
-                        margin: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                                color: Colors.grey.shade200
-                            )
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.shade300,
-                                  spreadRadius: 15,
-                                  blurRadius: 1,
-                                  offset: const Offset(-3, -3),
-                                ),
-            
-                                BoxShadow(
-                                  color: Colors.grey.shade50,
-                                  spreadRadius: 15,
-                                  blurRadius: 7,
-                                  offset: const Offset(3, 3),
-                                ),
-                              ],
-                              border: Border.all(
+                      child: Column(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(16),
+                            child: CustomDateInputFormField(
+                              autovalidateMode: AutovalidateMode.onUserInteraction,
+                              format: 'dd/MM/yyyy',
+                              controller: toDateController,
+                              scrollPadding: EdgeInsets.zero,
+                              style: TextStyle(
+                                  color: Pallete.primaryColor,
+                                  fontSize: 12
+                              ),
+
+                              decoration: InputDecoration(
+                                  labelText: 'TO (dd/MM/yyyy)',
+                                  labelStyle: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 12
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: const BorderSide(color: Colors.grey),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: const BorderSide(color: Colors.grey),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    borderSide: BorderSide(color: Pallete.primaryColor),
+                                  ),
+                                  contentPadding: EdgeInsets.zero,
+                                  prefixIcon: const Icon(
+                                      Icons.date_range
+                                  )
+                              ),
+                            ),
+                          ),
+
+                          Container(
+                            margin: const EdgeInsets.all(24),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                    color: Colors.grey.shade200
+                                )
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
                                   color: Colors.white,
-                                  width: 1
-                              )
-                          ),
-                          child: Column(
-                            children: [
-            
-                              const SizedBox(
-                                height: 12,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.shade300,
+                                      spreadRadius: 15,
+                                      blurRadius: 1,
+                                      offset: const Offset(-3, -3),
+                                    ),
+
+                                    BoxShadow(
+                                      color: Colors.grey.shade50,
+                                      spreadRadius: 15,
+                                      blurRadius: 7,
+                                      offset: const Offset(3, 3),
+                                    ),
+                                  ],
+                                  border: Border.all(
+                                      color: Colors.white,
+                                      width: 1
+                                  )
                               ),
-            
-                              CustomButton(
-                                btnColor: Colors.green,
-                                width: 200,
-                                borderRadius: 10,
-                                onTap: () {
-            
-                                  if (selectedEmployeeName == '' || selectedEmployeeName == null){
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          elevation: 0,
-                                          behavior: SnackBarBehavior.floating,
-                                          backgroundColor: Colors.transparent,
-                                          content: AwesomeSnackbarContent(
-                                            title: 'Input Error',
-                                            message: 'Please selected an employee',
-                                            contentType: ContentType.failure,
-                                          ),
-                                        )
-                                    );
-                                  }
-            
-                                  else if (selectedDept == '' || selectedDept == null){
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          elevation: 0,
-                                          behavior: SnackBarBehavior.floating,
-                                          backgroundColor: Colors.transparent,
-                                          content: AwesomeSnackbarContent(
-                                            title: 'Input Error',
-                                            message: 'Please select a department',
-                                            contentType: ContentType.failure,
-                                          ),
-                                        )
-                                    );
-                                  }
-            
-                                  else {
-            
-                                    dutyProvider.addEmployeeToRoster(
-                                        Helpers.addToRoster(
-                                           selectedEmployee: selectedEmployeeName!,
-                                           employeeRole: selectedEmployeeRole!,
-                                           selectedDept:  selectedDept!,
-                                           selectedDutyOptions:  selectedDutyOptions,
-                                           owing: int.parse(owingController!.text.isNotEmpty ? owingController!.text : '0')
-                                        )
-                                    );
-            
-                                    selectedEmployeeName = null;
-                                    selectedDept = null;
-                                    selectedDutyOptions = List.filled(7, "E");
+                              child: Column(
+                                children: [
+
+                                  const SizedBox(
+                                    height: 12,
+                                  ),
+
+                                  CustomButton(
+                                    btnColor: Colors.green,
+                                    width: 200,
+                                    borderRadius: 10,
+                                    onTap: () {
+
+                                      if (selectedEmployeeName == '' || selectedEmployeeName == null){
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              elevation: 0,
+                                              behavior: SnackBarBehavior.floating,
+                                              backgroundColor: Colors.transparent,
+                                              content: AwesomeSnackbarContent(
+                                                title: 'Input Error',
+                                                message: 'Please selected an employee',
+                                                contentType: ContentType.failure,
+                                              ),
+                                            )
+                                        );
+                                      }
+
+                                      else if (selectedDept == '' || selectedDept == null){
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              elevation: 0,
+                                              behavior: SnackBarBehavior.floating,
+                                              backgroundColor: Colors.transparent,
+                                              content: AwesomeSnackbarContent(
+                                                title: 'Input Error',
+                                                message: 'Please select a department',
+                                                contentType: ContentType.failure,
+                                              ),
+                                            )
+                                        );
+                                      }
+
+                                      else {
+
+                                        dutyProvider.addEmployeeToRoster(
+                                            Helpers.addToRoster(
+                                               selectedEmployee: selectedEmployeeName!,
+                                               employeeRole: selectedEmployeeRole!,
+                                               selectedDept:  selectedDept!,
+                                               selectedDutyOptions:  selectedDutyOptions,
+                                               owing: int.parse(owingController!.text.isNotEmpty ? owingController!.text : '0')
+                                            )
+                                        );
+
+                                        selectedEmployeeName = null;
+                                        selectedDept = null;
+                                        selectedDutyOptions = List.filled(7, "E");
 
 
-                                    if (owingController!.text.isNotEmpty){
-                                      owingController!.clear();
-                                    }
-            
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          elevation: 0,
-                                          behavior: SnackBarBehavior.floating,
-                                          backgroundColor: Colors.transparent,
-                                          content: AwesomeSnackbarContent(
-                                            title: 'Success',
-                                            message: 'Employee Added to Rooster',
-                                            contentType: ContentType.success,
-                                          ),
-                                        )
-                                    );
-                                  }
-                                },
-                                child: const Text(
-                                  'Add to Rooster',
-                                  style: TextStyle(
-                                      color: Colors.white
+                                        if (owingController!.text.isNotEmpty){
+                                          owingController!.clear();
+                                        }
+
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              elevation: 0,
+                                              behavior: SnackBarBehavior.floating,
+                                              backgroundColor: Colors.transparent,
+                                              content: AwesomeSnackbarContent(
+                                                title: 'Success',
+                                                message: 'Employee Added to Rooster',
+                                                contentType: ContentType.success,
+                                              ),
+                                            )
+                                        );
+                                      }
+                                    },
+                                    child: const Text(
+                                      'Add to Rooster',
+                                      style: TextStyle(
+                                          color: Colors.white
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-            
-                              const SizedBox(
-                                height: 12,
-                              ),
-            
-                              CustomButton(
-                                btnColor: Pallete.primaryColor,
-                                width: 200,
-                                borderRadius: 10,
-                                onTap: () {
-                                  Helpers.temporaryNavigator(context, const TablePreviewScreen());
-                                },
-                                child: const Text(
-                                  'Preview Duty',
-                                  style: TextStyle(
-                                    color: Colors.white
+
+                                  const SizedBox(
+                                    height: 12,
                                   ),
-                                ),
+
+                                  CustomButton(
+                                    btnColor: Pallete.primaryColor,
+                                    width: 200,
+                                    borderRadius: 10,
+                                    onTap: () {
+                                      if(fromDateController.text.isEmpty || toDateController.text.isEmpty){
+
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              elevation: 0,
+                                              behavior: SnackBarBehavior.floating,
+                                              backgroundColor: Colors.transparent,
+                                              content: AwesomeSnackbarContent(
+                                                title: 'Warning',
+                                                message: 'Enter From and To Dates',
+                                                contentType: ContentType.warning,
+                                              ),
+                                            )
+                                        );
+                                      }else{
+                                        Helpers.temporaryNavigator(context, TablePreviewScreen(from: fromDateController.text, to: toDateController.text));
+                                      }
+
+                                    },
+                                    child: const Text(
+                                      'Preview Duty',
+                                      style: TextStyle(
+                                        color: Colors.white
+                                      ),
+                                    ),
+                                  ),
+
+                                  const SizedBox(
+                                    height: 12,
+                                  ),
+                                ],
                               ),
-            
-                              const SizedBox(
-                                height: 12,
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                     )
                   ],

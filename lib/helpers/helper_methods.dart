@@ -64,7 +64,7 @@ class Helpers {
   }
 
 // Method to save table as PDF
-  static Future<String> saveAsPDF(List<DutyModel> employees, var tableData) async {
+  static Future<String> saveAsPDF({required List<DutyModel> employees, required var tableData, required String fromDate, required String toDate}) async {
     String? saveLocation;
     final pdf = pw.Document();
     final logoImage = await _loadLogoImage();
@@ -85,13 +85,13 @@ class Helpers {
                 children: [
                   pw.Image(
                     pw.MemoryImage(logoImage),
-                    width: 50,
-                    height: 50,
+                    width: 40,
+                    height: 40,
                   )
                 ]
             ),
              pw.SizedBox(
-               height: 2
+               height: 1
              ),
              pw.Row(
                  mainAxisAlignment: pw.MainAxisAlignment.center,
@@ -100,22 +100,28 @@ class Helpers {
                      'ST JOSEPH`S MISSION HOSPITAL DUTY',
                      style: pw.TextStyle(
                        fontWeight: pw.FontWeight.bold,
-                       fontSize: 12
+                       fontSize: 10
                      )
                    )
                  ]
              ),
-            pw.SizedBox(height: 12),
+            pw.SizedBox(height: 8),
              pw.Row(
                  mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                  children: [
                    pw.Text(
-                     'FROM:...............................................................',
-                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                     'FROM: $fromDate                                     .',
+                     style: pw.TextStyle(
+                       fontWeight: pw.FontWeight.bold,
+                       decoration: pw.TextDecoration.underline,
+                     ),
                    ),
                    pw.Text(
-                     'TO:.................................................................',
-                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold),
+                     'TO: $toDate                                         .',
+                     style: pw.TextStyle(
+                       fontWeight: pw.FontWeight.bold,
+                       decoration: pw.TextDecoration.underline,
+                     ),
                    ),
                  ]
              ),
@@ -140,8 +146,8 @@ class Helpers {
             headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 10),
             headerAlignment: pw.Alignment.center,
             cellAlignment: pw.Alignment.center,
-            headerHeight: 30,
-            cellHeight: 20,
+            headerHeight: 20,
+            cellHeight: 18,
             cellStyle: const pw.TextStyle(fontSize: 9),
             headerPadding: pw.EdgeInsets.zero,
             data: tableData,

@@ -9,7 +9,9 @@ import '../../../utils/colors/pallete.dart';
 import '../../widgets/custom_button.dart';
 
 class TablePreviewScreen extends StatefulWidget {
-  const TablePreviewScreen({Key? key}) : super(key: key);
+  final String to;
+  final String from;
+  const TablePreviewScreen({Key? key, required this.to, required this.from}) : super(key: key);
 
   @override
   State<TablePreviewScreen> createState() => _TablePreviewScreenState();
@@ -97,6 +99,7 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
                   onTap: () {
                     setState(() {
                       _isSorted = true;
+                      _buildSortedRows(employeeDutyProvider.selectedEmployees);
                     });
                   },
                 ),
@@ -111,8 +114,11 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
                   ),
                   onTap: () async {
                     String saveLocation = await Helpers.saveAsPDF(
-                        employeeDutyProvider.selectedEmployees,
-                        _buildTableData(employeeDutyProvider.selectedEmployees));
+                      employees:  employeeDutyProvider.selectedEmployees,
+                      tableData:  _buildTableData(employeeDutyProvider.selectedEmployees),
+                      fromDate: widget.from,
+                      toDate: widget.to
+                    );
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -287,7 +293,7 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
 
   int _compareAndSortDepartments(String departmentA, String departmentB) {
     // Define the order of departments
-    final departmentOrder = ['Ward', 'OPD Peads', 'OPD Adults', 'TB Corner', ''];
+    final departmentOrder = ['Ward', 'OPD Peads', 'OPD Adults', 'TB Corner', ' '];
 
     // Compare departments based on their index in the order list
     return departmentOrder.indexOf(departmentA) - departmentOrder.indexOf(departmentB);
@@ -295,7 +301,7 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
 
   int _compareAndSortRoles(String roleA, String roleB) {
     // Define the order of roles
-    final roleOrder = ['RGN', 'Nurse Aid', 'Gen Hand', 'Student'];
+    final roleOrder = ['RGN', 'Nurse Aid', 'Gen Hand', 'General Hand', 'Student', ' '];
 
     // Compare roles based on their index in the order list
     return roleOrder.indexOf(roleA) - roleOrder.indexOf(roleB);
@@ -314,7 +320,9 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
     for (var employeeDuty in employeeDuties) {
       tableData.add([
         employeeDuty.name,
-        employeeDuty.role,
+        employeeDuty.role.toLowerCase() == 'student'
+            ? 'RC Std'
+            : employeeDuty.role.toLowerCase() == "general hand" ? 'Gen Hand' : employeeDuty.role,
         employeeDuty.department,
         employeeDuty.monday,
         employeeDuty.tuesday,
