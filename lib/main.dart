@@ -1,4 +1,5 @@
 import 'package:duty_allocation_system/api_services/employee_methods/employee.dart';
+import 'package:duty_allocation_system/providers/duty_allocation_provider.dart';
 import 'package:duty_allocation_system/providers/duty_provider.dart';
 import 'package:duty_allocation_system/providers/employee_provider.dart';
 import 'package:duty_allocation_system/providers/user_provider.dart';
@@ -28,7 +29,8 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => DutyProvider()),
         ChangeNotifierProvider(create: (context) => UserProvider()),
-        ChangeNotifierProvider(create: (context) => EmployeeProvider())
+        ChangeNotifierProvider(create: (context) => EmployeeProvider()),
+        ChangeNotifierProvider(create: (context) => DutyAllocationProvider())
       ],
       child: const MyApp(),
     ),

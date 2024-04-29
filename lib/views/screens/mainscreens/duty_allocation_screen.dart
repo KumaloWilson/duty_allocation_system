@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:duty_allocation_system/helpers/helper_methods.dart';
 import 'package:duty_allocation_system/models/employee_model.dart';
+import 'package:duty_allocation_system/providers/duty_allocation_provider.dart';
 import 'package:duty_allocation_system/utils/colors/pallete.dart';
 import 'package:duty_allocation_system/views/widgets/custom_button.dart';
 import 'package:duty_allocation_system/views/widgets/custom_date_picker.dart';
@@ -56,21 +59,32 @@ class _DutyAllocationScreenState extends State<DutyAllocationScreen> {
 
   List<EmployeeModel> availableEmployees = [];
 
+  StreamSubscription<List<EmployeeModel>>? _streamSubscription;
+
   @override
-  void initState() {
-    super.initState();
-    getName();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // Check if the subscription is null or canceled before setting it up
+    if (_streamSubscription == null || _streamSubscription!.isPaused) {
+      _streamSubscription = Provider.of<DutyAllocationProvider>(context, listen: false)
+          .employeesDutyStream
+          .listen((List<EmployeeModel> employees) {
+        setState(() {
+          availableEmployees = employees;
+        });
+      }, onError: (error) {
+        // Handle error if needed
+        print('Error fetching employees: $error');
+      });
+    }
   }
 
-  void getName() {
-    Provider.of<EmployeeProvider>(context, listen: false).employeesDutyStream.listen((List<EmployeeModel> employees) {
-      setState(() {
-        availableEmployees = employees;
-      });
-    }, onError: (error) {
-      // Handle error if needed
-      print('Error fetching employees: $error');
-    });
+  @override
+  void dispose() {
+    // Cancel the stream subscription when the widget is disposed
+    _streamSubscription?.cancel();
+    super.dispose();
   }
 
 

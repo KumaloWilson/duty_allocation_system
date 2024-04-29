@@ -158,7 +158,16 @@ class _TablePreviewScreenState extends State<TablePreviewScreen> {
             ),
           ),
 
-          DataCell(Text(employee.role)),
+          DataCell(
+            TextFormField(
+              initialValue: employee.role,
+              onChanged: (newValue) {
+                setState(() {
+                  employee.role = newValue;
+                });
+              },
+            ),
+          ),
 
           DataCell(
             TextFormField(
